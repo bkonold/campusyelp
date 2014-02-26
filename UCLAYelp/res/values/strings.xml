@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">UCLAYelp</string>
+    <string name="action_settings">Settings</string>
+    <string name="bruin_plate">Bruin Plate</string>
+    <string name="deneve">De Neve</string>
+    <string name="covel">Covel</string>
+    <string name="feast">Feast At Rieber</string>
+    <string name="title_activity_de_neve">DeNeve</string>
+    <string name="title_activity_display_menus">Food</string>
+
+</resources>
