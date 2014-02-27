@@ -76,27 +76,3 @@ class MenuScraper:
 		self.deneveDinner = [i for it, i in enumerate(dinnerSet1[1:]) if it%2 == 1]
 		self.feastDinner = [i for it, i in enumerate(dinnerSet2[1:]) if it%2 == 0]
 		self.bpDinner = [i for it, i in enumerate(dinnerSet2[1:]) if it%2 == 1]
-
-	def covelLunch():
-		return self.covelLunch
-
-	def deneveLunch():
-		return self.deneveLunch
-
-	def feastLunch():
-		return self.feastLunch
-
-	def bpLunch():
-		return self.bpLunch
-
-	def covelDinner():
-		return self.covelDinner
-
-	def deneveDinner():
-		return self.deneveDinner
-
-	def feastDinner():
-		return self.feastDinner
-
-	def bpDinner():
-		return self.bpDinner

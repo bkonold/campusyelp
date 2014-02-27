@@ -2,18 +2,11 @@ from django.db import models
 
 # Create your models here.
 
-
 class Food(models.Model):
 	title = models.CharField(max_length=100, unique=True)
 
 	def __unicode__(self):
-		return "Food: " + self.title
-class Menu(models.Model):
-	day = models.DateField(primary_key=True)
-	food_items = models.ManyToManyField(Food)
-
-	def __unicode__(self):
-		return "Food Items: [" + food_items.join(" ") + "]"
+		return self.title
 
 class Review(models.Model):
 	title = models.CharField(max_length=100)
@@ -22,11 +15,11 @@ class Review(models.Model):
 	food_item = models.ForeignKey(Food)
 
 	def __unicode__(self):
-		return "Review: " + self.title
+		return self.title
 
 class Image(models.Model):
 	path = models.CharField(max_length=200)
 	food_item = models.ForeignKey(Food)
 
 	def __unicode__(self):
-		return "Path: " + self.path + "\n" + "Food: " + self.food_item
+		return "Path: " + self.path + " -- " + "Food: " + self.food_item
