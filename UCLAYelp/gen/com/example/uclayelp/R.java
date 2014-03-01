@@ -44,6 +44,7 @@ public final class R {
     public static final class id {
         public static final int LinearLayout1=0x7f080000;
         public static final int action_settings=0x7f080011;
+        public static final int add_review_button=0x7f08000c;
         public static final int button1=0x7f080001;
         public static final int button2=0x7f080002;
         public static final int button3=0x7f080003;
@@ -57,7 +58,6 @@ public final class R {
         public static final int lblListItem=0x7f08000f;
         public static final int product_label=0x7f08000a;
         public static final int ratingBar1=0x7f080008;
-        public static final int submitButton=0x7f08000c;
         public static final int text_field=0x7f080007;
         public static final int view_pager=0x7f08000d;
     }
@@ -83,7 +83,6 @@ public final class R {
         public static final int covel=0x7f050004;
         public static final int deneve=0x7f050003;
         public static final int feast=0x7f050005;
-        public static final int image_swiper=0x7f050008;
         public static final int title_activity_de_neve=0x7f050006;
         public static final int title_activity_display_menus=0x7f050007;
     }

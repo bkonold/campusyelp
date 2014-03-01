@@ -3,10 +3,8 @@ package com.example.uclayelp;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,50 +12,27 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	private String diningHall;
 	private String meal;
 	private String entree;
-	private float buttonRating;
-	private ImageView iv;
 	
-	public static final int CAMERA_REQUEST_CODE = 1;
-	
-
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.entree_details);
         
+        
         setupActionBar();
         
         ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton1);
         imageButton.setImageResource(R.drawable.breakfast);
-        imageButton.setOnClickListener(this);        
+        imageButton.setOnClickListener(this);
         
-        Button submitButton = (Button) findViewById(R.id.submitButton);
-        submitButton.setOnClickListener(this);
-        
-        Button cameraButton = (Button) findViewById(R.id.camera_button);
-        cameraButton.setOnClickListener(this);
-        
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
-        ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {	
-			@Override
-			public void onRatingChanged(RatingBar ratingBar, float rating,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-					
-				buttonRating = rating;
-			}
-		});
-
-        //iv.setImageDrawable(null);
+        Button addReviewButton = (Button) findViewById(R.id.add_review_button);
+        addReviewButton.setOnClickListener(this);
         
         Intent i = getIntent();
         diningHall = i.getStringExtra(Constants.DINING_HALL);
@@ -65,7 +40,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         entree = i.getStringExtra(Constants.ENTREE);
         setTitle(entree);
         
-        cameraButton.setText("Take a picture of " + entree + "!");
 	}
 	
 	/**
@@ -110,44 +84,20 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		switch (v.getId()){
 		case R.id.imageButton1:
 			intent = new Intent(this, ImageSwipeActivity.class);
-			intent.putExtra(Constants.ENTREE, entree);
-			startActivity(intent);
 			break;
-		case R.id.camera_button:
-			intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    	if (intent.resolveActivity(getPackageManager()) != null){
-	    		startActivityForResult(intent, CAMERA_REQUEST_CODE); // 1 = request_image_capture
-	    	}
-		case R.id.ratingBar1:
-			// I don't think you have to do anything here because
-			// rating bar has it's own onClickListener action
-			// The SUBMIT button should just use the ratingBar member value
-    	    break;
-		case R.id.submitButton:
-			// Insert networking portion HERE:
-			// Use ratingBar member value to get the food rating
-			// Use iv member to check/submit the image
-			
-			// Check if user uploaded an image somehow
-			// ^^ Not entirely sure how to do this
+		case R.id.add_review_button:
+			intent = new Intent(this, AddReviewActivity.class);
 			break;
-		
 		default:
 			intent = new Intent(this, AddReviewActivity.class);
-			intent.putExtra(Constants.ENTREE, entree);
-			startActivity(intent);
 			break;
 		}
+	  
+		intent.putExtra(Constants.ENTREE, entree);
+		startActivity(intent);
+		
+    	
     }
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-	        Bundle extras = data.getExtras();
-	        Bitmap imageBitmap = (Bitmap) extras.get("data");
-	        iv.setImageBitmap(imageBitmap);
-	    }
-	}
 	
 	
 }
