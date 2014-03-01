@@ -9,5 +9,6 @@
     <string name="feast">Feast At Rieber</string>
     <string name="title_activity_de_neve">DeNeve</string>
     <string name="title_activity_display_menus">Food</string>
+    <string name="image_swiper">View gallery of user-submitted images:</string>
 
 </resources>
