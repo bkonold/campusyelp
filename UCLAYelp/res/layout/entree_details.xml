@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
-
 
     <TextView
         android:id="@+id/product_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="10dip"
-        android:textColor="#ffffff"
-        android:textSize="25dip"
-        android:textStyle="bold" />
+        android:text="@string/image_swiper"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center" />
 
     <ImageButton
         android:id="@+id/imageButton1"
@@ -27,14 +28,38 @@
         android:layout_weight="0.76" >
 
         <Button
-            android:id="@+id/add_review_button"
+            style="@style/btnStyleGenoa"
+            android:id="@+id/submitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Submit Rating and/or Picture" />
+
+        <RatingBar
+            android:id="@+id/ratingBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/submitButton"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/camera_button"
+            style="@style/btnStyleGenoa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imageView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
+            android:text="Take a picture of this entree!" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ratingBar1"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="22dp"
-            android:layout_marginTop="68dp"
-            android:text="Review this entree" />
+            android:src="@drawable/dinner" />
 
     </RelativeLayout>
 
