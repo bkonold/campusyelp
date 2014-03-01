@@ -50,7 +50,6 @@ public class MainActivity extends Activity implements OnClickListener {
     	} else {
     	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	    builder.setMessage(Constants.NETWORK_ERR_MSG)
-    	           .setCancelable(false)
     	           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
     	        	   public void onClick(DialogInterface dialog,int id) {
    					       // if this button is clicked, just close
