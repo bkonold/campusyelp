@@ -1,8 +1,13 @@
 package com.example.uclayelp;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
@@ -36,11 +41,35 @@ public class MainActivity extends Activity implements OnClickListener {
     
     @Override
     public void onClick(View v){
-    	displayMenus(v.getId());
+    	// Check network connection
+    	ConnectivityManager connMgr = (ConnectivityManager) 
+    	        getSystemService(Context.CONNECTIVITY_SERVICE);
+    	NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    	if (networkInfo != null && networkInfo.isConnected()) {
+    		displayMenus(v.getId());
+    	} else {
+    	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	    builder.setMessage(Constants.NETWORK_ERR_MSG)
+    	           .setCancelable(false)
+    	           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    	        	   public void onClick(DialogInterface dialog,int id) {
+   					       // if this button is clicked, just close
+   						   // the dialog box and do nothing
+   						   dialog.cancel();
+   					   }
+		    });
+    	    
+    	    AlertDialog alertDialog = builder.create();
+    	    alertDialog.show();
+    	    
+    	}
+    	
+    	
     }
     
     /** Called when the user clicks one of the dining hall buttons. */
     public void displayMenus(int buttonId) {
+ 
     	// Show menus
         Intent intent = new Intent(this, DisplayMenusActivity.class);
         

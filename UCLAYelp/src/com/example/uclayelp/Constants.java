@@ -16,4 +16,5 @@ public class Constants {
 	public final static String MENU = "com.example.uclayelp.MENU";
 	public final static String ENTREE = "com.example.uclayelp.ENTREE";
 	
+	public final static String NETWORK_ERR_MSG = "No network connection.";
 }
