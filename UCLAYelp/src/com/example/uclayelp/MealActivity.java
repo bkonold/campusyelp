@@ -35,18 +35,8 @@ public class MealActivity extends ExpandableListActivity {
 		meal = intent.getStringExtra(Constants.MEAL);
 		diningHall = intent.getStringExtra(Constants.DINING_HALL);
 		menu = intent.getStringArrayExtra(Constants.MENU);
-
-		listDataHeader = new ArrayList<String>();
-		listDataChild = new HashMap<String, List<String>>();
 		
-		List<String> menuList = Arrays.asList(menu);
-		
-		listDataHeader.add("hi abby");
-		listDataHeader.add("bye abby");
-		listDataHeader.add("third");
-		listDataChild.put(listDataHeader.get(0), menuList);
-		listDataChild.put(listDataHeader.get(1), menuList);
-		listDataChild.put(listDataHeader.get(2), menuList);
+		populateList();
 		 
 		listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);		
 		expListView.setAdapter(listAdapter);
@@ -70,5 +60,30 @@ public class MealActivity extends ExpandableListActivity {
 		
 		startActivity(i);
 		return true;
+	}
+	
+	private void populateList() {
+		listDataHeader = new ArrayList<String>();
+		listDataChild = new HashMap<String, List<String>>();
+		
+		int size = 3;
+		
+		if (diningHall.equals(Constants.DE_NEVE)) {
+			listDataHeader = Constants.DENEVE_KITCHENS;
+		} else if (diningHall.equals(Constants.COVEL)) {
+			listDataHeader = Constants.COVEL_KITCHENS;
+		} else if (diningHall.equals(Constants.BRUIN_PLATE)) {
+			listDataHeader = Constants.BP_KITCHENS;
+			size+=1;
+		} else {
+			listDataHeader = Constants.FEAST_KITCHENS;
+			size+=1;
+		}
+		
+		List<String> menuList = Arrays.asList(menu);
+		
+		for (int i = 0; i < size; i++) {
+			listDataChild.put(listDataHeader.get(i), menuList);
+		}
 	}
 }
