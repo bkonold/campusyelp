@@ -1,5 +1,8 @@
 package com.example.uclayelp;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Constants {
 	
 	public static final String BREAKFAST = "Breakfast";
@@ -17,6 +20,15 @@ public class Constants {
 	public final static String ENTREE = "com.example.uclayelp.ENTREE";
 	
 	public final static String NETWORK_ERR_MSG = "No network connection.  Please try again!";
+	
+	public static final List<String> FEAST_KITCHENS =
+	        Arrays.asList("Bruin Wok", "Spice Kitchen", "Stone Oven", "Iron Grill");
+	public static final List<String> COVEL_KITCHENS =
+	        Arrays.asList("Exhibition Kitchen", "Euro Kitchen", "Pizza Oven");
+	public static final List<String> DENEVE_KITCHENS =
+			Arrays.asList("Exhibition Kitchen", "Euro Kitchen", "Grill");
+	public static final List<String> BP_KITCHENS =
+	        Arrays.asList("Freshly Bowled", "Harvest", "Stone Fired", "Simply Grilled");
 	
 	public static final String JSON_DE_NEVE = "deneve";
 	public static final String JSON_COVEL = "covel";
