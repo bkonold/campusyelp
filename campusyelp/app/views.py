@@ -20,42 +20,42 @@ def menu(request):
     for l in scraped_menus.covelLunch:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["covel"]["lunch"].append("station": l[0], "items": foodList})
+        menus["covel"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.deneveLunch:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["deneve"]["lunch"].append("station": l[0], "items": foodList})
+        menus["deneve"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.bpLunch:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["bp"]["lunch"].append("station": l[0], "items": foodList})
+        menus["bp"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.feastLunch:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["feast"]["lunch"].append("station": l[0], "items": foodList})
+        menus["feast"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.covelDinner:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["covel"]["dinner"].append("station": l[0], "items": foodList})
+        menus["covel"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.deneveDinner:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["deneve"]["dinner"].append("station": l[0], "items": foodList})
+        menus["deneve"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.bpDinner:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["bp"]["dinner"].append("station": l[0], "items": foodList})
+        menus["bp"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.feastDinner:
         foodList = l[1:]
         ViewHelper.addOrFetch(foodList)
-        menus["feast"]["dinner"].append("station": l[0], "items": foodList})
+        menus["feast"]["dinner"].append({"station": l[0], "items": foodList})
 
 
     return HttpResponse(json.dumps(menus), content_type="application/json")
