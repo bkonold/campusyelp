@@ -7,6 +7,8 @@ import java.util.Locale;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,19 +32,13 @@ import android.widget.Toast;
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
 	private static final int CAMERA_REQUEST_CODE = 1;
-	private static final int CAMERA_PIC_REQUEST = 0;
-	private static final int CAMERA_CAPTURE_IMAGE_REQUEST = 100;
-	private static final int MEDIA_TYPE_IMAGE = 1;
-	private static final String IMAGE_DIRECTORY_NAME = "Test Camera";
 	
-	private Uri fileUri; // file url to store images
 	
 	private String diningHall;
 	private String meal;
 	private String entree;
 	private float buttonRating;
 	private ImageView iv;
-	private Bitmap bitmap;
 	
 
 	
@@ -163,97 +159,45 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		 File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
 		 iv = (ImageView) findViewById(R.id.imageView1);
-		 iv.setImageBitmap(decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250)); 
+		 Bitmap bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250);
+		 iv.setImageBitmap(bitmap);
 	}
 	
-	 public static Bitmap decodeSampledBitmapFromFile(String path,
+	public static Bitmap decodeSampledBitmapFromFile(String path,
 		        int reqWidth, int reqHeight) { // BEST QUALITY MATCH
 
-		    // First decode with inJustDecodeBounds=true to check dimensions
-		    final BitmapFactory.Options options = new BitmapFactory.Options();
-		    options.inJustDecodeBounds = true;
-		    BitmapFactory.decodeFile(path, options);
+        // First decode with inJustDecodeBounds=true to check dimensions
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(path, options);
 
-		    // Calculate inSampleSize
-		        // Raw height and width of image
-		        final int height = options.outHeight;
-		        final int width = options.outWidth;
-		        options.inPreferredConfig = Bitmap.Config.RGB_565;
-		        int inSampleSize = 1;
+		// Calculate inSampleSize
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		options.inPreferredConfig = Bitmap.Config.RGB_565;
+		int inSampleSize = 1;
 
-		        if (height > reqHeight) {
-		            inSampleSize = Math.round((float)height / (float)reqHeight);
-		        }
+	if (height > reqHeight) {
+	    inSampleSize = Math.round((float)height / (float)reqHeight);
+	}
 
-		        int expectedWidth = width / inSampleSize;
+	        int expectedWidth = width / inSampleSize;
 
-		        if (expectedWidth > reqWidth) {
-		            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
-		            inSampleSize = Math.round((float)width / (float)reqWidth);
-		        }
+	        if (expectedWidth > reqWidth) {
+	            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
+	            inSampleSize = Math.round((float)width / (float)reqWidth);
+	        }
 
 
-		    options.inSampleSize = inSampleSize;
+	    options.inSampleSize = inSampleSize;
 
-		    // Decode bitmap with inSampleSize set
-		    options.inJustDecodeBounds = false;
+	    // Decode bitmap with inSampleSize set
+	    options.inJustDecodeBounds = false;
 
-		    return BitmapFactory.decodeFile(path, options);
-		  }
-	/*@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    super.onActivityResult(requestCode, resultCode, data);
-	    switch(requestCode){
-	    case 0:
-	        if(resultCode==RESULT_OK){
-	           Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-	           iv.setImageBitmap(thumbnail);
-	            }
-	    }
-	}*/
-	
-	/*
-     * Display image from a path to ImageView
-     */
+	    return BitmapFactory.decodeFile(path, options);
+	  }
+
     
-    /**
-     * Creating file uri to store image/video
-     */
-    public Uri getOutputMediaFileUri(int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-     
-    /*
-     * returning image / video
-     */
-    private static File getOutputMediaFile(int type) {
-     
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                IMAGE_DIRECTORY_NAME);
-     
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
-                        + IMAGE_DIRECTORY_NAME + " directory");
-                return null;
-            }
-        }
-     
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-     
-        return mediaFile;
-    }
+    
 }
