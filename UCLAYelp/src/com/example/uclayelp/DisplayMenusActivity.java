@@ -3,12 +3,15 @@ package com.example.uclayelp;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
@@ -30,7 +33,7 @@ public class DisplayMenusActivity extends TabActivity {
 		
 		setTitle("Food for " + diningHall);
 			
-		tabHost = getTabHost();		
+		tabHost = getTabHost();
 		// adding tabspec to tabhost
 		tabHost.addTab(createTab(diningHall, Constants.BREAKFAST));
 		tabHost.addTab(createTab(diningHall, Constants.LUNCH));
@@ -77,14 +80,26 @@ public class DisplayMenusActivity extends TabActivity {
 	 */
 	private TabSpec createTab(String diningHall, String meal) {
 		TabSpec tab = tabHost.newTabSpec(meal);
-		tab.setIndicator(meal, getResources().getDrawable(R.drawable.icon_breakfast_tab));
+		tab.setIndicator(meal); //, getResources().getDrawable(R.drawable.icon_breakfast_tab));
 		Intent newIntent = new Intent(this, MealActivity.class);
+		
+		tab.setIndicator(meal, this.getResources().getDrawable(android.R.drawable.star_on));
+    	tab.setIndicator(getTabIndicator(tabHost.getContext(), meal)); // new function to inject our own tab layout
+		
+		
 		newIntent.putExtra(Constants.DINING_HALL, diningHall);
 		newIntent.putExtra(Constants.MEAL, meal);
 		newIntent.putExtra(Constants.MENU,  placeHolderData(diningHall, meal));
 		tab.setContent(newIntent);
 		return tab;
 	}
+	
+    private View getTabIndicator(Context context, String title) {
+        View view = LayoutInflater.from(context).inflate(R.layout.tab_layout, null);
+        TextView tv = (TextView) view.findViewById(R.id.textView);
+        tv.setText(title);
+        return view;
+    }
    
 	// TODO: delete this method after testing!
 	private String[] placeHolderData(String diningHall, String meal) {
