@@ -58,8 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/ratingBar1"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/dinner" />
+            android:layout_alignParentTop="true" />
 
     </RelativeLayout>
 

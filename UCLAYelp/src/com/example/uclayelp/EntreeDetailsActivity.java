@@ -1,14 +1,22 @@
 package com.example.uclayelp;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,15 +25,24 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
+import android.widget.Toast;
 
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
+	
+	private static final int CAMERA_REQUEST_CODE = 1;
+	private static final int CAMERA_PIC_REQUEST = 0;
+	private static final int CAMERA_CAPTURE_IMAGE_REQUEST = 100;
+	private static final int MEDIA_TYPE_IMAGE = 1;
+	private static final String IMAGE_DIRECTORY_NAME = "Test Camera";
+	
+	private Uri fileUri; // file url to store images
+	
 	private String diningHall;
 	private String meal;
 	private String entree;
 	private float buttonRating;
 	private ImageView iv;
-	
-	public static final int CAMERA_REQUEST_CODE = 1;
+	private Bitmap bitmap;
 	
 
 	
@@ -45,6 +62,9 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         
         Button cameraButton = (Button) findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(this);
+        
+        iv = (ImageView) findViewById(R.id.imageView1);
+        
         
         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
         ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {	
@@ -108,10 +128,15 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.camera_button:
-			intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    	if (intent.resolveActivity(getPackageManager()) != null){
+			//intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    	/*intent = new Intent();
+	    	intent.setType("image/*");
+	    	intent.setAction(Intent.ACTION_GET_CONTENT);
+	    	intent.addCategory(Intent.CATEGORY_OPENABLE);
+			if (intent.resolveActivity(getPackageManager()) != null){
 	    		startActivityForResult(intent, CAMERA_REQUEST_CODE); // 1 = request_image_capture
-	    	}
+	    	}*/
+			takePicture();
 		case R.id.ratingBar1:
 			// I don't think you have to do anything here because
 			// rating bar has it's own onClickListener action
@@ -134,14 +159,119 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		}
     }
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-	        Bundle extras = data.getExtras();
-	        Bitmap imageBitmap = (Bitmap) extras.get("data");
-	        iv.setImageBitmap(imageBitmap);
-	    }
+	private void takePicture() {
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+		
+		startActivityForResult(intent, CAMERA_PIC_REQUEST);
+		
 	}
 	
 	
+	/**
+	 * Receiving activity result method will be called after closing the camera
+	 * */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    // if the result is capturing Image
+	    if (requestCode == CAMERA_PIC_REQUEST) {
+	        if (resultCode == RESULT_OK) {
+	            // successfully captured the image
+	            // display it in image view
+	            //previewCapturedImage(data);
+	        	if(data != null)
+	            {
+	                Bitmap photo = (Bitmap) data.getExtras().get("data");
+	                photo = Bitmap.createScaledBitmap(photo, 80, 80, false);
+	                iv.setImageBitmap(photo);
+	            }
+	        } else if (resultCode == RESULT_CANCELED) {
+	            // user cancelled Image capture
+	            Toast.makeText(getApplicationContext(),
+	                    "User cancelled image capture", Toast.LENGTH_SHORT)
+	                    .show();
+	        } else {
+	            // failed to capture image
+	            Toast.makeText(getApplicationContext(),
+	                    "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
+	                    .show();
+	        }
+	    }
+	}
+	/*@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
+	    switch(requestCode){
+	    case 0:
+	        if(resultCode==RESULT_OK){
+	           Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+	           iv.setImageBitmap(thumbnail);
+	            }
+	    }
+	}*/
+	
+	/*
+     * Display image from a path to ImageView
+     */
+    private void previewCapturedImage(Intent data) {
+        try {
+
+ 
+            iv.setVisibility(View.VISIBLE);
+ 
+            // bimatp factory
+            BitmapFactory.Options options = new BitmapFactory.Options();
+ 
+            // downsizing image as it throws OutOfMemory Exception for larger
+            // images
+            options.inSampleSize = 8;
+ 
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+	           iv.setImageBitmap(thumbnail);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Creating file uri to store image/video
+     */
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+     
+    /*
+     * returning image / video
+     */
+    private static File getOutputMediaFile(int type) {
+     
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+     
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+                        + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+     
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+     
+        return mediaFile;
+    }
 }
