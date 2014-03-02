@@ -17,4 +17,14 @@ public class Constants {
 	public final static String ENTREE = "com.example.uclayelp.ENTREE";
 	
 	public final static String NETWORK_ERR_MSG = "No network connection.  Please try again!";
+	
+	public static final String JSON_DE_NEVE = "deneve";
+	public static final String JSON_COVEL = "covel";
+	public static final String JSON_BRUIN_PLATE = "bp";
+	public static final String JSON_FEAST = "feast";
+	
+	public static final String JSON_OBJ_MENU = "json menu";
+	
+	public static final String LUNCH_MENU = "lunch menu";
+	public static final String DINNER_MENU = "dinner menu";
 }

@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TabHost;
@@ -19,6 +18,8 @@ import android.widget.TextView;
 public class DisplayMenusActivity extends TabActivity {
 	
 	private TabHost tabHost;
+	private Menu menu;
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,8 @@ public class DisplayMenusActivity extends TabActivity {
 		// Set the title based on the button pressed
 		Intent intent = getIntent();
 		String diningHall = intent.getStringExtra(Constants.DINING_HALL);
-		
+		menu = intent.getParcelableExtra(Constants.JSON_OBJ_MENU);  
+        
 		setTitle("Food for " + diningHall);
 			
 		tabHost = getTabHost();
@@ -90,6 +92,8 @@ public class DisplayMenusActivity extends TabActivity {
 		newIntent.putExtra(Constants.DINING_HALL, diningHall);
 		newIntent.putExtra(Constants.MEAL, meal);
 		newIntent.putExtra(Constants.MENU,  placeHolderData(diningHall, meal));
+
+		
 		tab.setContent(newIntent);
 		return tab;
 	}
@@ -108,4 +112,6 @@ public class DisplayMenusActivity extends TabActivity {
 		return arr;
 		
 	}
+	
+	
 }

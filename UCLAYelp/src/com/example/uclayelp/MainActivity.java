@@ -1,25 +1,30 @@
 package com.example.uclayelp;
 
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.view.Menu;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+
 public class MainActivity extends Activity implements OnClickListener {
+	
+	private static String menuUrl = "http://54.186.3.129/app/menu";
+	private Menu menu;
+	private String diningHall;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         
         Button deNeveButton = (Button) findViewById(R.id.button1);
         Button covelButton = (Button) findViewById(R.id.button2);
@@ -39,7 +44,7 @@ public class MainActivity extends Activity implements OnClickListener {
     	        getSystemService(Context.CONNECTIVITY_SERVICE);
     	NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
     	if (networkInfo != null && networkInfo.isConnected()) {
-    		displayMenus(v.getId());
+    		getMenu(v.getId());
     	} else {
     	    AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	    builder.setMessage(Constants.NETWORK_ERR_MSG)
@@ -60,29 +65,61 @@ public class MainActivity extends Activity implements OnClickListener {
     }
     
     /** Called when the user clicks one of the dining hall buttons. */
-    public void displayMenus(int buttonId) {
+    private void getMenu(int buttonId) {
+    	String json_diningHall = "";
+    	switch(buttonId) {
+	        case R.id.button1:
+	        	diningHall = Constants.DE_NEVE;
+	        	json_diningHall = Constants.JSON_DE_NEVE;
+	    	    break;
+	        case R.id.button2:
+	        	diningHall = Constants.COVEL;
+	        	json_diningHall = Constants.JSON_COVEL;
+	    	    break;
+	        case R.id.button3:
+	        	diningHall = Constants.BRUIN_PLATE;
+	        	json_diningHall = Constants.JSON_BRUIN_PLATE;
+	    	    break;
+	        case R.id.button4:
+	        	diningHall = Constants.FEAST;
+	        	json_diningHall = Constants.JSON_FEAST;
+	    	    break;
+    	}
+    	
+    	new GetMenuTask().execute(menuUrl, json_diningHall);
+    }
+    
+    /** Called when the async task completes */
+    public void displayMenus(Menu menu, String diningHall) {
+
  
     	// Show menus
         Intent intent = new Intent(this, DisplayMenusActivity.class);
-        
-        switch(buttonId) {
-            case R.id.button1:
-            	intent.putExtra(Constants.DINING_HALL, Constants.DE_NEVE);
-        	    break;
-            case R.id.button2:
-            	intent.putExtra(Constants.DINING_HALL, Constants.COVEL);
-        	    break;
-            case R.id.button3:
-            	intent.putExtra(Constants.DINING_HALL, Constants.BRUIN_PLATE);
-        	    break;
-            case R.id.button4:
-            	intent.putExtra(Constants.DINING_HALL, Constants.FEAST);
-        	    break;
-        }
-        
+        intent.putExtra(Constants.DINING_HALL, diningHall);
+        intent.putExtra(Constants.JSON_OBJ_MENU, menu);
         startActivity(intent);
     }
     
 
+    private class GetMenuTask extends AsyncTask<String, Void, Menu> {
+    	
+    	@Override
+    	protected Menu doInBackground (String... params) {
+    		String url = params[0];
+    	    String diningHall = params[1];
+    		
+    		JSONParser parser = new JSONParser();
+    		return parser.getMenuFromJson(url,  diningHall);
+    		
+    		
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(Menu result) {
+    		displayMenus(result, diningHall);
+    	}
+    }
     
+    
+
 }
