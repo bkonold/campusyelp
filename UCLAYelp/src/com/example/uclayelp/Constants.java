@@ -39,4 +39,5 @@ public class Constants {
 	
 	public static final String LUNCH_MENU = "lunch menu";
 	public static final String DINNER_MENU = "dinner menu";
+	
 }

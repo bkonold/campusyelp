@@ -91,7 +91,10 @@ public class DisplayMenusActivity extends TabActivity {
 		
 		newIntent.putExtra(Constants.DINING_HALL, diningHall);
 		newIntent.putExtra(Constants.MEAL, meal);
-		newIntent.putExtra(Constants.MENU,  placeHolderData(diningHall, meal));
+		if (meal.equals(Constants.LUNCH))
+				newIntent.putExtra(Constants.MENU,  menu.getLunchMenu());
+		else
+			newIntent.putExtra(Constants.MENU,  menu.getDinnerMenu());
 
 		
 		tab.setContent(newIntent);
@@ -105,13 +108,7 @@ public class DisplayMenusActivity extends TabActivity {
         return view;
     }
    
-	// TODO: delete this method after testing!
-	private String[] placeHolderData(String diningHall, String meal) {
-		String arr[] = new String[5];
-		arr[0]=arr[1]=arr[2]=arr[3]=arr[4]=diningHall + " " + meal;
-		return arr;
-		
-	}
+
 	
 	
 }

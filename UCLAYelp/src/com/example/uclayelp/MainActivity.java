@@ -97,7 +97,8 @@ public class MainActivity extends Activity implements OnClickListener {
         Intent intent = new Intent(this, DisplayMenusActivity.class);
         intent.putExtra(Constants.DINING_HALL, diningHall);
         intent.putExtra(Constants.JSON_OBJ_MENU, menu);
-        startActivity(intent);
+        if (menu.getLunchMenu() != null)
+        	startActivity(intent);
     }
     
 

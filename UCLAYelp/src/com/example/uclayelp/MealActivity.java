@@ -1,7 +1,6 @@
 package com.example.uclayelp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class MealActivity extends ExpandableListActivity {
 
 	private String meal;
 	private String diningHall;
-	private String [] menu ;
+	private ArrayList<Station> stationList;
 	 
     private ExpandableListAdapter listAdapter;
     private ExpandableListView expListView;
@@ -34,7 +33,7 @@ public class MealActivity extends ExpandableListActivity {
 		Intent intent = getIntent();
 		meal = intent.getStringExtra(Constants.MEAL);
 		diningHall = intent.getStringExtra(Constants.DINING_HALL);
-		menu = intent.getStringArrayExtra(Constants.MENU);
+		stationList = intent.getParcelableArrayListExtra(Constants.MENU);
 		
 		populateList();
 		 
@@ -80,9 +79,13 @@ public class MealActivity extends ExpandableListActivity {
 			size+=1;
 		}
 		
-		List<String> menuList = Arrays.asList(menu);
-		
 		for (int i = 0; i < size; i++) {
+			ArrayList<String> menuList = new ArrayList<String>();
+			ArrayList<Entree> entreeList = new ArrayList<Entree>();
+			entreeList = stationList.get(i).getEntrees();
+			for (int j = 0; j < entreeList.size(); j++) {
+				menuList.add(entreeList.get(j).getTitle());
+			}
 			listDataChild.put(listDataHeader.get(i), menuList);
 		}
 	}

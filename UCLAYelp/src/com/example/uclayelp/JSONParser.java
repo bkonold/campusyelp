@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class JSONParser {
 
     static InputStream is = null;
@@ -48,6 +50,7 @@ public class JSONParser {
 	    		ArrayList<Station> dinnerStations = new ArrayList<Station>();
 	    		
 	    		// lunch: get stations, and entrees for each station
+	    		Log.w("blah", "lunch array length" + lunchArray.length());
 	    		for (int i = 0; i < lunchArray.length(); i++) {
 	    			
 	    			JSONObject stationObj = lunchArray.getJSONObject(i);
@@ -62,8 +65,9 @@ public class JSONParser {
 	    				float rating = (float) entreeObj.getDouble("rating");
 	    				Entree e = new Entree(rating, entreeId, entreeName);
 	    				stationEntrees.add(e);
+	    				
 	    			}
-	    			
+
 	    			Station station = new Station(json_diningHall, stationName, stationEntrees);
 	    			lunchStations.add(station);
 	    		}
@@ -76,7 +80,7 @@ public class JSONParser {
 	    			
 	    			ArrayList<Entree> stationEntrees = new ArrayList<Entree>();
 	    			JSONArray entreeArray = stationObj.getJSONArray("items");
-	    			s="neil";
+	    			
 	    			for (int j = 0; j < entreeArray.length(); j++) {
 	    				JSONObject entreeObj = entreeArray.getJSONObject(j);
 	    				String entreeName = entreeObj.getString("title");
@@ -97,7 +101,7 @@ public class JSONParser {
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				s = "nope";
+				
 			}
             return menu;
 
