@@ -15,6 +15,6 @@ class JsonHelper:
                 "food_id": review.food_id}
 
     @staticmethod
-    def buildReviewFromJson(review_json):
+    def buildReviewFromJson(review_json, food_id):
         d = json.loads(review_json)
-        return Review(title=d["title"], content=d["content"], rating=d["rating"], food_id=d["food_id"])
+        return Review(title=d["title"], content=d["content"], rating=d["rating"], food_id=food_id)
