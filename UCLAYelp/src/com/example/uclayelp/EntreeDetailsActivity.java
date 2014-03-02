@@ -128,15 +128,11 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 			startActivity(intent);
 			break;
 		case R.id.camera_button:
-			//intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    	/*intent = new Intent();
-	    	intent.setType("image/*");
-	    	intent.setAction(Intent.ACTION_GET_CONTENT);
-	    	intent.addCategory(Intent.CATEGORY_OPENABLE);
-			if (intent.resolveActivity(getPackageManager()) != null){
-	    		startActivityForResult(intent, CAMERA_REQUEST_CODE); // 1 = request_image_capture
-	    	}*/
-			takePicture();
+			 intent = new Intent("android.media.action.IMAGE_CAPTURE");
+			 File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
+			 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+			 startActivityForResult(intent, CAMERA_REQUEST_CODE);
+			 break;
 		case R.id.ratingBar1:
 			// I don't think you have to do anything here because
 			// rating bar has it's own onClickListener action
@@ -159,46 +155,51 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		}
     }
 	
-	private void takePicture() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-		
-		startActivityForResult(intent, CAMERA_PIC_REQUEST);
-		
-	}
-	
 	
 	/**
 	 * Receiving activity result method will be called after closing the camera
 	 * */
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    // if the result is capturing Image
-	    if (requestCode == CAMERA_PIC_REQUEST) {
-	        if (resultCode == RESULT_OK) {
-	            // successfully captured the image
-	            // display it in image view
-	            //previewCapturedImage(data);
-	        	if(data != null)
-	            {
-	                Bitmap photo = (Bitmap) data.getExtras().get("data");
-	                photo = Bitmap.createScaledBitmap(photo, 80, 80, false);
-	                iv.setImageBitmap(photo);
-	            }
-	        } else if (resultCode == RESULT_CANCELED) {
-	            // user cancelled Image capture
-	            Toast.makeText(getApplicationContext(),
-	                    "User cancelled image capture", Toast.LENGTH_SHORT)
-	                    .show();
-	        } else {
-	            // failed to capture image
-	            Toast.makeText(getApplicationContext(),
-	                    "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-	                    .show();
-	        }
-	    }
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		 File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
+		 iv = (ImageView) findViewById(R.id.imageView1);
+		 iv.setImageBitmap(decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250)); 
 	}
+	
+	 public static Bitmap decodeSampledBitmapFromFile(String path,
+		        int reqWidth, int reqHeight) { // BEST QUALITY MATCH
+
+		    // First decode with inJustDecodeBounds=true to check dimensions
+		    final BitmapFactory.Options options = new BitmapFactory.Options();
+		    options.inJustDecodeBounds = true;
+		    BitmapFactory.decodeFile(path, options);
+
+		    // Calculate inSampleSize
+		        // Raw height and width of image
+		        final int height = options.outHeight;
+		        final int width = options.outWidth;
+		        options.inPreferredConfig = Bitmap.Config.RGB_565;
+		        int inSampleSize = 1;
+
+		        if (height > reqHeight) {
+		            inSampleSize = Math.round((float)height / (float)reqHeight);
+		        }
+
+		        int expectedWidth = width / inSampleSize;
+
+		        if (expectedWidth > reqWidth) {
+		            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
+		            inSampleSize = Math.round((float)width / (float)reqWidth);
+		        }
+
+
+		    options.inSampleSize = inSampleSize;
+
+		    // Decode bitmap with inSampleSize set
+		    options.inJustDecodeBounds = false;
+
+		    return BitmapFactory.decodeFile(path, options);
+		  }
 	/*@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    super.onActivityResult(requestCode, resultCode, data);
@@ -214,25 +215,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	/*
      * Display image from a path to ImageView
      */
-    private void previewCapturedImage(Intent data) {
-        try {
-
- 
-            iv.setVisibility(View.VISIBLE);
- 
-            // bimatp factory
-            BitmapFactory.Options options = new BitmapFactory.Options();
- 
-            // downsizing image as it throws OutOfMemory Exception for larger
-            // images
-            options.inSampleSize = 8;
- 
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-	           iv.setImageBitmap(thumbnail);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
     
     /**
      * Creating file uri to store image/video
