@@ -2,6 +2,7 @@ package com.example.uclayelp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -102,7 +103,14 @@ public class MainActivity extends Activity implements OnClickListener {
     }
     
 
+
     private class GetMenuTask extends AsyncTask<String, Void, Menu> {
+        ProgressDialog progressDialog;
+    	@Override
+        protected void onPreExecute()
+        {
+            progressDialog= ProgressDialog.show(MainActivity.this, "Just a Second!", "Loading Menus...", true);             
+        }; 
     	
     	@Override
     	protected Menu doInBackground (String... params) {
@@ -111,13 +119,12 @@ public class MainActivity extends Activity implements OnClickListener {
     		
     		JSONParser parser = new JSONParser();
     		return parser.getMenuFromJson(url,  diningHall);
-    		
-    		
     	}
     	
     	@Override
     	protected void onPostExecute(Menu result) {
     		displayMenus(result, diningHall);
+    		progressDialog.dismiss();
     	}
     }
     
