@@ -3,6 +3,7 @@
 *.pyc
 local_settings.py
 *.sqlite3
+*.DS_Store
 
 # Built application files
 *.apk

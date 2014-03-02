@@ -11,15 +11,8 @@ class Food(models.Model):
 class Review(models.Model):
 	title = models.CharField(max_length=100)
 	content = models.CharField(max_length=500)
-	rating = models.IntegerField()
+	rating = models.FloatField()
 	food = models.ForeignKey(Food)
 
 	def __unicode__(self):
 		return self.title
-
-class Image(models.Model):
-	path = models.CharField(max_length=200)
-	food = models.ForeignKey(Food)
-
-	def __unicode__(self):
-		return "Path: " + self.path + " -- " + "Food: " + self.food
