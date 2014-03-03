@@ -59,10 +59,7 @@ public class MainActivity extends Activity implements OnClickListener {
     	    
     	    AlertDialog alertDialog = builder.create();
     	    alertDialog.show();
-    	    
     	}
-    	
-    	
     }
     
     /** Called when the user clicks one of the dining hall buttons. */
@@ -93,7 +90,6 @@ public class MainActivity extends Activity implements OnClickListener {
     /** Called when the async task completes */
     public void displayMenus(Menu menu, String diningHall) {
 
- 
     	// Show menus
         Intent intent = new Intent(this, DisplayMenusActivity.class);
         intent.putExtra(Constants.DINING_HALL, diningHall);
@@ -105,11 +101,22 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
     private class GetMenuTask extends AsyncTask<String, Void, Menu> {
-        ProgressDialog progressDialog;
+        // For loading message
+    	ProgressDialog myProgressDialog;
+    
     	@Override
         protected void onPreExecute()
         {
-            progressDialog= ProgressDialog.show(MainActivity.this, "Just a Second!", "Loading Menus...", true);             
+    		// Before anything runs, show loading message
+    		// Respond to back button (cancel loading)
+            myProgressDialog= ProgressDialog.show(MainActivity.this, "Just a Second!", "Loading Menus...", 
+            		true, true,  new DialogInterface.OnCancelListener(){
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        	myProgressDialog.dismiss();
+                        }
+            }
+            );
         }; 
     	
     	@Override
@@ -124,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener {
     	@Override
     	protected void onPostExecute(Menu result) {
     		displayMenus(result, diningHall);
-    		progressDialog.dismiss();
+    		myProgressDialog.dismiss();
     	}
     }
     

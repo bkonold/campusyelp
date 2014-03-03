@@ -3,6 +3,7 @@ package com.example.uclayelp;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -26,8 +27,11 @@ public class ImageSwipeActivity extends Activity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         ImageSwiper adapter = new ImageSwiper();
         viewPager.setAdapter(adapter);
- 
         
+        Intent i = getIntent();
+        String entree = i.getStringExtra(Constants.ENTREE);
+ 
+        setTitle("Photos of " + entree);
 	}
 	
 	/**

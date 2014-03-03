@@ -81,7 +81,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         entree = i.getStringExtra(Constants.ENTREE);
         setTitle(entree);
         
-        cameraButton.setText("Take a picture of " + entree + "!");
 	}
 	
 	/**
