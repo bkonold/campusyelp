@@ -1,9 +1,6 @@
 package com.example.uclayelp;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -18,26 +15,27 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
-import android.widget.Toast;
 
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
 	private static final int CAMERA_REQUEST_CODE = 1;
 	
-	
 	private String diningHall;
 	private String meal;
+	
 	private String entree;
+	private int eid;
 	private float buttonRating;
+
 	private ImageView iv;
 	
 
@@ -59,6 +57,9 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         Button cameraButton = (Button) findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(this);
         
+        Button addReviewButton = (Button) findViewById(R.id.review_button);
+        addReviewButton.setOnClickListener(this);
+        
         iv = (ImageView) findViewById(R.id.imageView1);
         
         
@@ -79,6 +80,10 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         diningHall = i.getStringExtra(Constants.DINING_HALL);
         meal = i.getStringExtra(Constants.MEAL);
         entree = i.getStringExtra(Constants.ENTREE);
+        eid = i.getIntExtra(Constants.EID, 1);
+        buttonRating = i.getFloatExtra(Constants.RATING, 0);
+        
+        
         setTitle(entree);
         
 	}
@@ -128,6 +133,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 			 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 			 startActivityForResult(intent, CAMERA_REQUEST_CODE);
 			 break;
+		case R.id.review_button:
+			getReviewPopupDialog();
 		case R.id.ratingBar1:
 			// I don't think you have to do anything here because
 			// rating bar has it's own onClickListener action
@@ -150,6 +157,32 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		}
     }
 	
+	
+	/** Called after add review button pressed. */
+	private void getReviewPopupDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Add your review");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  String value = input.toString();
+		  // Do something with value!
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled
+		  }
+		});
+
+		alert.show();
+	}
 	
 	/**
 	 * Receiving activity result method will be called after closing the camera

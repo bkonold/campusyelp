@@ -60,7 +60,6 @@ public class MealActivity extends ExpandableListActivity {
 		i.putExtra(Constants.ENTREE,  entree.getTitle());
 		i.putExtra(Constants.RATING, entree.getRating());
 		i.putExtra(Constants.EID, entree.getId());
-		//i.putExtra(Constants.ENTREE, entree);
 		
 		startActivity(i);
 		return true;
