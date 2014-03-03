@@ -18,6 +18,8 @@ public class Constants {
 	public final static String MEAL = "com.example.uclayelp.MEAL";
 	public final static String MENU = "com.example.uclayelp.MENU";
 	public final static String ENTREE = "com.example.uclayelp.ENTREE";
+	public final static String RATING = "com.example.uclayelp.RATING";
+	public final static String EID = "com.example.uclayelp.EID";
 	
 	public final static String NETWORK_ERR_MSG = "No network connection.  Please try again!";
 	

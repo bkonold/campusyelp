@@ -21,6 +21,8 @@ public class MealActivity extends ExpandableListActivity {
     
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
+    
+    private HashMap<String, List<Entree>> stationEntreeMap;
 
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -48,14 +50,17 @@ public class MealActivity extends ExpandableListActivity {
 	
 	public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
 		//selected item
-		List<String> entrees = listDataChild.get(listDataHeader.get(groupPosition));
-		String entree = entrees.get(childPosition);
+		List<Entree> entrees = stationEntreeMap.get(listDataHeader.get(groupPosition));
+		Entree entree = entrees.get(childPosition);
 		
 		//launch new activity
 		Intent i = new Intent(getApplicationContext(), EntreeDetailsActivity.class);
 		i.putExtra(Constants.DINING_HALL, diningHall);
 		i.putExtra(Constants.MEAL, meal);
-		i.putExtra(Constants.ENTREE, entree);
+		i.putExtra(Constants.ENTREE,  entree.getTitle());
+		i.putExtra(Constants.RATING, entree.getRating());
+		i.putExtra(Constants.EID, entree.getId());
+		//i.putExtra(Constants.ENTREE, entree);
 		
 		startActivity(i);
 		return true;
@@ -64,6 +69,7 @@ public class MealActivity extends ExpandableListActivity {
 	private void populateList() {
 		listDataHeader = new ArrayList<String>();
 		listDataChild = new HashMap<String, List<String>>();
+		stationEntreeMap = new HashMap<String, List<Entree>>();
 		
 		int size = 3;
 		
@@ -87,6 +93,7 @@ public class MealActivity extends ExpandableListActivity {
 				menuList.add(entreeList.get(j).getTitle());
 			}
 			listDataChild.put(listDataHeader.get(i), menuList);
+			stationEntreeMap.put(listDataHeader.get(i), entreeList);
 		}
 	}
 }

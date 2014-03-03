@@ -22,6 +22,8 @@ public class JSONParser {
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
+    
+    private static String REVIEWS_BASE_URL = "http://54.186.3.129/app/reviews/";
 
     // constructor
     public JSONParser() {}
@@ -29,7 +31,6 @@ public class JSONParser {
    
     public Menu getMenuFromJson(String url, String json_diningHall) {
     	Menu menu = null;
-    	HttpEntity httpEntity = null;
         // Making HTTP request
         try {
             // defaultHttpClient
@@ -37,7 +38,7 @@ public class JSONParser {
             HttpGet httpPost = new HttpGet(url);
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
-            httpEntity = httpResponse.getEntity();
+            HttpEntity httpEntity = httpResponse.getEntity();
             String s =  EntityUtils.toString(httpEntity);
             try {
 				JSONObject jObj = new JSONObject(s);
@@ -118,5 +119,42 @@ public class JSONParser {
 
     }
 
+    public ArrayList<Review> getReviewsFromJson(int eid) {
+    	String url = REVIEWS_BASE_URL + eid;
+    	ArrayList<Review> reviews = new ArrayList<Review>();
+    	
+    	 // Making HTTP request
+        try {
+            // defaultHttpClient
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpGet httpPost = new HttpGet(url);
+
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            HttpEntity httpEntity = httpResponse.getEntity();
+            String s =  EntityUtils.toString(httpEntity);
+            JSONObject jObj = new JSONObject(s);
+            JSONArray reviewsArray = jObj.getJSONArray("reviews");
+            for (int i = 0; i < reviewsArray.length(); i++) {
+            	JSONObject reviewObj = reviewsArray.getJSONObject(i);
+            	int id = reviewObj.getInt("id");
+            	String title = reviewObj.getString("title");
+            	String content = reviewObj.getString("content");
+            	float rating = (float) reviewObj.getDouble("rating");
+            	Review review = new Review(id, title, content, rating);
+            	reviews.add(review);
+            	
+            }
+
+
+	    		
+        } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+        }
+	
+    	return reviews;
+    	
+    }
     
 }
