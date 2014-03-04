@@ -113,10 +113,8 @@ public class JSONParser {
             	JSONObject reviewObj = reviewsArray.getJSONObject(i);
             	String content = reviewObj.getString("content");
             	if (!content.equals("")) {
-            		int id = reviewObj.getInt("food_id");
-            		String title = reviewObj.getString("title");
             		float rating = (float) reviewObj.getDouble("rating");
-            		Review review = new Review(id, title, content, rating);
+            		Review review = new Review(content, rating);
             		reviews.add(review);
             	}
             	
