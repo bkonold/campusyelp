@@ -24,23 +24,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
 	private static final int CAMERA_REQUEST_CODE = 1;
 	
-	private String diningHall;
-	private String meal;
-	
 	private String entree;
 	private int eid;
-	private float buttonRating;
 
-	private ImageView iv;
 	private ListView lv;
 	
 
@@ -52,46 +45,36 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         
         setupActionBar();
         
+        Intent i = getIntent();
+        entree = i.getStringExtra(Constants.ENTREE);
+        eid = i.getIntExtra(Constants.EID, 1);
+        
+        // set title of Activity
+        setTitle(entree);
+       
         ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton1);
+        // TODO: get the right image?
         imageButton.setImageResource(R.drawable.breakfast);
         imageButton.setOnClickListener(this);        
 
-        
+        // Button to add a photo
         Button cameraButton = (Button) findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(this);
         
+        // Button to add a review
         Button addReviewButton = (Button) findViewById(R.id.review_button);
         addReviewButton.setOnClickListener(this);
         
-        iv = (ImageView) findViewById(R.id.imageView1);
-        
-        lv = (ListView) findViewById(R.id.listView1);
-        
-        
+        // Rating bar
         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
-        ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {	
-			@Override
-			public void onRatingChanged(RatingBar ratingBar, float rating,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-					
-				buttonRating = rating;
-			}
-		});
-
-        //iv.setImageDrawable(null);
+        float buttonRating = i.getFloatExtra(Constants.RATING, 0);
+        ratingBar.setRating(buttonRating); 
+        ratingBar.setClickable(false);
         
-        Intent i = getIntent();
-        diningHall = i.getStringExtra(Constants.DINING_HALL);
-        meal = i.getStringExtra(Constants.MEAL);
-        entree = i.getStringExtra(Constants.ENTREE);
-        eid = i.getIntExtra(Constants.EID, 1);
-        buttonRating = i.getFloatExtra(Constants.RATING, 0);
+        // List of reviews
+        lv = (ListView) findViewById(R.id.listView1);  
         ArrayList<Review> reviews = new ArrayList<Review>();
         reviews = i.getParcelableArrayListExtra(Constants.REVIEWS);
-        
-        
-        setTitle(entree);
         setListView(reviews);
         
 	}
@@ -143,46 +126,12 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 			 break;
 		case R.id.review_button:
 			getReviewPopupDialog();
-		case R.id.ratingBar1:
-			// I don't think you have to do anything here because
-			// rating bar has it's own onClickListener action
-			// The SUBMIT button should just use the ratingBar member value
-    	    break;
-
-		
-		default:
-			intent = new Intent(this, AddReviewActivity.class);
-			intent.putExtra(Constants.ENTREE, entree);
-			startActivity(intent);
-			break;
 		}
     }
 	
 	
 	/** Called after add review button pressed. */
 	private void getReviewPopupDialog() {
-		/*AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-		alert.setTitle("Add your review");
-
-		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);
-		alert.setView(input);
-
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int whichButton) {
-		  String value = input.toString();
-		  // Do something with value!
-		  }
-		});
-
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int whichButton) {
-		    // Canceled
-		  }
-		});
-
-		alert.show();*/
 		LayoutInflater li = LayoutInflater.from(this);
 		View v = li.inflate(R.layout.add_review, null);
 		
@@ -196,7 +145,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			  String value = userInput.toString();
-			  // Do something with value!
+			  
+			  // TODO: post review to server
 			  }
 			});
 
@@ -218,6 +168,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		// iv = (ImageView) findViewById(R.id.imageView1);
 		 Bitmap bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250);
 		 //iv.setImageBitmap(bitmap);
+		 
+		 //TODO: post to server
 	}
 	
 	public static Bitmap decodeSampledBitmapFromFile(String path,
@@ -254,6 +206,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 
 	    return BitmapFactory.decodeFile(path, options);
 	  }
+	
+	/** Populate list of reviews .*/
 	
 	private void setListView(ArrayList<Review> reviews) {
 		String [] reviewContent = new String [reviews.size()];

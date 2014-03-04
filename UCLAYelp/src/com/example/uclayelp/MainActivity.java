@@ -1,7 +1,5 @@
 package com.example.uclayelp;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -20,7 +18,6 @@ import android.widget.Button;
 public class MainActivity extends Activity implements OnClickListener {
 	
 	private static String menuUrl = "http://54.186.3.129/app/menu";
-	private Menu menu;
 	private String diningHall;
 	
     @Override

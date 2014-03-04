@@ -15,7 +15,6 @@ import android.widget.ExpandableListView;
 
 public class MealActivity extends ExpandableListActivity {
 
-	private String meal;
 	private String diningHall;
 	private ArrayList<Station> stationList;
 	private Entree selectedEntree;
@@ -37,7 +36,6 @@ public class MealActivity extends ExpandableListActivity {
 		
 		 //get the Intent and the meal, dining hall, and menu
 		Intent intent = getIntent();
-		meal = intent.getStringExtra(Constants.MEAL);
 		diningHall = intent.getStringExtra(Constants.DINING_HALL);
 		stationList = intent.getParcelableArrayListExtra(Constants.MENU);
 		
@@ -124,8 +122,6 @@ public class MealActivity extends ExpandableListActivity {
     	@Override
     	protected void onPostExecute(ArrayList<Review> result) {
     		Intent i = new Intent(getApplicationContext(), EntreeDetailsActivity.class);
-    		i.putExtra(Constants.DINING_HALL, diningHall);
-    		i.putExtra(Constants.MEAL, meal);
     		i.putExtra(Constants.ENTREE,  selectedEntree.getTitle());
     		i.putExtra(Constants.RATING, selectedEntree.getRating());
     		i.putExtra(Constants.EID, selectedEntree.getId());

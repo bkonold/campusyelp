@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Constants {
 	
-	public static final String BREAKFAST = "Breakfast";
 	public static final String LUNCH = "Lunch";
 	public static final String DINNER = "Dinner";
 	
