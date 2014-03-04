@@ -136,10 +136,10 @@ public class JSONParser {
             JSONArray reviewsArray = jObj.getJSONArray("reviews");
             for (int i = 0; i < reviewsArray.length(); i++) {
             	JSONObject reviewObj = reviewsArray.getJSONObject(i);
-            	String title = reviewObj.getString("title");
-            	if (!title.equals("")) {
+            	String content = reviewObj.getString("content");
+            	if (!content.equals("")) {
             		int id = reviewObj.getInt("food_id");
-            		String content = reviewObj.getString("content");
+            		String title = reviewObj.getString("title");
             		float rating = (float) reviewObj.getDouble("rating");
             		Review review = new Review(id, title, content, rating);
             		reviews.add(review);

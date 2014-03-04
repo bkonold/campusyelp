@@ -20,6 +20,7 @@ public class Constants {
 	public final static String ENTREE = "com.example.uclayelp.ENTREE";
 	public final static String RATING = "com.example.uclayelp.RATING";
 	public final static String EID = "com.example.uclayelp.EID";
+	public final static String REVIEWS = "comm.example.uclayelp.REVIEWS";
 	
 	public final static String NETWORK_ERR_MSG = "No network connection.  Please try again!";
 	

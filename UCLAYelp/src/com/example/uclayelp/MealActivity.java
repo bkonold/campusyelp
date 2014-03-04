@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.ExpandableListActivity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -15,6 +18,7 @@ public class MealActivity extends ExpandableListActivity {
 	private String meal;
 	private String diningHall;
 	private ArrayList<Station> stationList;
+	private Entree selectedEntree;
 	 
     private ExpandableListAdapter listAdapter;
     private ExpandableListView expListView;
@@ -51,17 +55,10 @@ public class MealActivity extends ExpandableListActivity {
 	public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
 		//selected item
 		List<Entree> entrees = stationEntreeMap.get(listDataHeader.get(groupPosition));
-		Entree entree = entrees.get(childPosition);
+		selectedEntree = entrees.get(childPosition);
 		
 		//launch new activity
-		Intent i = new Intent(getApplicationContext(), EntreeDetailsActivity.class);
-		i.putExtra(Constants.DINING_HALL, diningHall);
-		i.putExtra(Constants.MEAL, meal);
-		i.putExtra(Constants.ENTREE,  entree.getTitle());
-		i.putExtra(Constants.RATING, entree.getRating());
-		i.putExtra(Constants.EID, entree.getId());
-		
-		startActivity(i);
+		new GetReviewsTask().execute(29); // TODO: replace w/ eid
 		return true;
 	}
 	
@@ -95,4 +92,47 @@ public class MealActivity extends ExpandableListActivity {
 			stationEntreeMap.put(listDataHeader.get(i), entreeList);
 		}
 	}
+	
+	
+	private class GetReviewsTask extends AsyncTask<Integer, Void, ArrayList<Review>> {
+        // For loading message
+    	ProgressDialog myProgressDialog;
+    
+    	@Override
+        protected void onPreExecute()
+        {
+    		// Before anything runs, show loading message
+    		// Respond to back button (cancel loading)
+            myProgressDialog= ProgressDialog.show(MealActivity.this, "Just a Second!", "Loading Menus...", 
+            		true, true,  new DialogInterface.OnCancelListener(){
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        	myProgressDialog.dismiss();
+                        }
+            }
+            );
+        }; 
+    	
+    	@Override
+    	protected ArrayList<Review> doInBackground (Integer... params) {
+    		Integer entree_id = params[0];
+    		
+    		JSONParser parser = new JSONParser();
+    		return parser.getReviewsFromJson(entree_id);
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(ArrayList<Review> result) {
+    		Intent i = new Intent(getApplicationContext(), EntreeDetailsActivity.class);
+    		i.putExtra(Constants.DINING_HALL, diningHall);
+    		i.putExtra(Constants.MEAL, meal);
+    		i.putExtra(Constants.ENTREE,  selectedEntree.getTitle());
+    		i.putExtra(Constants.RATING, selectedEntree.getRating());
+    		i.putExtra(Constants.EID, selectedEntree.getId());
+    		i.putExtra(Constants.REVIEWS, result);
+    		
+    		startActivity(i);
+    		myProgressDialog.dismiss();
+    	}
+    }
 }

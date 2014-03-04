@@ -24,7 +24,7 @@ public class AddReviewActivity extends Activity implements OnClickListener {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.add_review);
+        this.setContentView(R.layout.add_review_v1);
         setupActionBar();
         
         iv = (ImageView) findViewById(R.id.imageView1);
