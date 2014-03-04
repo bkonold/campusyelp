@@ -3,23 +3,36 @@ package com.example.uclayelp;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,7 +82,12 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
         float buttonRating = i.getFloatExtra(Constants.RATING, 0);
         ratingBar.setRating(buttonRating); 
-        ratingBar.setClickable(false);
+        ratingBar.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        ratingBar.setFocusable(false);
         
         // List of reviews
         lv = (ListView) findViewById(R.id.listView1);  
@@ -141,12 +159,15 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		builder.setTitle("Add your review");
 		
 		final EditText userInput = (EditText) v.findViewById(R.id.editText1);
+		final RatingBar ratingBar = (RatingBar) v.findViewById(R.id.ratingBar1);
 		
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-			  String value = userInput.toString();
-			  
-			  // TODO: post review to server
+				//TODO: delete title from json string later
+			    String content = userInput.getText().toString();
+			    Float rating = ratingBar.getRating();
+			    String json = "{\"title\":\"blah\", \"content\":\"" + content + "\", \"rating\":\"" + rating.toString() + "\"}";
+			    new PostReviewTask().execute(json);
 			  }
 			});
 
@@ -220,5 +241,63 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	}
 
 	 
+	private class PostReviewTask extends AsyncTask<String, Void, Integer> {
+        // For loading message
+    	ProgressDialog myProgressDialog;
+    
+    	@Override
+        protected void onPreExecute()
+        {// Before anything runs, show loading message
+    		// Respond to back button (cancel loading)
+            myProgressDialog= ProgressDialog.show(EntreeDetailsActivity.this, "Just a Second!", "Submitting review...", 
+            		true, true,  new DialogInterface.OnCancelListener(){
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        	myProgressDialog.dismiss();
+                        }
+            }
+            );
+        }; 
+    	
+    	@Override
+    	protected Integer doInBackground (String... params) {
+    		String url = Constants.REVIEWS_BASE_URL + eid;
+            Integer success = 0; // set to 1 when post succeeds
+            String json = params[0];
+            Log.w("tag", json);
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            
+            try {
+
+                HttpPost httppost = new HttpPost(url);
+                httppost.setHeader("Content-type", "application/json");
+
+                StringEntity se = new StringEntity(json); 
+                se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                httppost.setEntity(se); 
+
+                HttpResponse response = httpClient.execute(httppost);
+                String temp = EntityUtils.toString(response.getEntity());
+                Log.w("tag", temp);
+                success = 1;
+
+            } catch (Exception e) {
+            	Log.w("postreview", e.getMessage());
+            }
+            return success;
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(Integer result) {
+    		myProgressDialog.dismiss();
+    		AlertDialog.Builder builder = new AlertDialog.Builder(EntreeDetailsActivity.this);
+    		if (result == 1) { 			
+    			builder.setMessage("Review submitted.");
+    		} else {
+    			builder.setMessage("There was an error submitting your review. Please try again.");
+    		}
+    		
+    	}
+    }
     
 }

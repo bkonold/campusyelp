@@ -12,8 +12,6 @@ import org.json.JSONObject;
 
 public class JSONParser {
 
-    
-    private static String REVIEWS_BASE_URL = "http://54.186.3.129/app/reviews/";
 
     // constructor
     public JSONParser() {}
@@ -95,7 +93,7 @@ public class JSONParser {
     }
 
     public ArrayList<Review> getReviewsFromJson(int eid) {
-    	String url = REVIEWS_BASE_URL + eid;
+    	String url = Constants.REVIEWS_BASE_URL + eid;
     	ArrayList<Review> reviews = new ArrayList<Review>();
     	
     	 // Making HTTP request

@@ -56,7 +56,7 @@ public class MealActivity extends ExpandableListActivity {
 		selectedEntree = entrees.get(childPosition);
 		
 		//launch new activity
-		new GetReviewsTask().execute(29); // TODO: replace w/ eid
+		new GetReviewsTask().execute(selectedEntree.getId()); // TODO: replace w/ eid
 		return true;
 	}
 	

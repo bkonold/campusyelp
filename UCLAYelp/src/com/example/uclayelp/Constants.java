@@ -42,4 +42,6 @@ public class Constants {
 	public static final String LUNCH_MENU = "lunch menu";
 	public static final String DINNER_MENU = "dinner menu";
 	
+	public static final String REVIEWS_BASE_URL = "http://54.186.3.129/app/reviews/";
+	
 }
