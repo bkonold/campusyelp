@@ -37,12 +37,9 @@ public class DisplayMenusActivity extends TabActivity {
 			
 		tabHost = getTabHost();
 		// adding tabspec to tabhost
-		tabHost.addTab(createTab(diningHall, Constants.BREAKFAST));
 		tabHost.addTab(createTab(diningHall, Constants.LUNCH));
 		tabHost.addTab(createTab(diningHall, Constants.DINNER));
-		
-		// default to lunch because who doesn't know what's for breakfast
-		tabHost.setCurrentTab(1);
+
 
 	}
 
