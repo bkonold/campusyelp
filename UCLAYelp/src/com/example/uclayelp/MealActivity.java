@@ -23,7 +23,7 @@ public class MealActivity extends ExpandableListActivity {
     private ExpandableListView expListView;
     
     private List<String> listDataHeader;
-    private HashMap<String, List<String>> listDataChild;
+    private HashMap<String, List<Entree>> listDataChild;
     
     private HashMap<String, List<Entree>> stationEntreeMap;
 
@@ -62,7 +62,7 @@ public class MealActivity extends ExpandableListActivity {
 	
 	private void populateList() {
 		listDataHeader = new ArrayList<String>();
-		listDataChild = new HashMap<String, List<String>>();
+		listDataChild = new HashMap<String, List<Entree>>();
 		stationEntreeMap = new HashMap<String, List<Entree>>();
 		
 		int size = 3;
@@ -80,11 +80,11 @@ public class MealActivity extends ExpandableListActivity {
 		}
 		
 		for (int i = 0; i < size; i++) {
-			ArrayList<String> menuList = new ArrayList<String>();
+			ArrayList<Entree> menuList = new ArrayList<Entree>();
 			ArrayList<Entree> entreeList = new ArrayList<Entree>();
 			entreeList = stationList.get(i).getEntrees();
 			for (int j = 0; j < entreeList.size(); j++) {
-				menuList.add(entreeList.get(j).getTitle());
+				menuList.add(entreeList.get(j));
 			}
 			listDataChild.put(listDataHeader.get(i), menuList);
 			stationEntreeMap.put(listDataHeader.get(i), entreeList);

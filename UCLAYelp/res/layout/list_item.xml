@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="55dip"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
  
     <TextView
@@ -12,5 +13,13 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+    <RatingBar
+        android:id="@+id/ratingDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="true"
+        android:scaleX="0.6"
+  		android:scaleY="0.6" /> 
  
 </LinearLayout>

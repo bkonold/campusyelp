@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.RatingBar;
 import android.widget.TextView;
  
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -16,10 +17,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<Entree>> _listDataChild;
  
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-            HashMap<String, List<String>> listChildData) {
+            HashMap<String, List<Entree>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -40,7 +41,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
  
-        final String childText = (String) getChild(groupPosition, childPosition);
+        Entree child = (Entree) getChild(groupPosition, childPosition);
+        final String childText = child.getTitle();
+        final float childScore = child.getRating();
  
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -48,10 +51,17 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_item, null);
         }
  
+        // Set each entree's title
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
- 
         txtListChild.setText(childText);
+        
+        // Set each entree's rating
+        RatingBar childRatingBar = (RatingBar) convertView
+        		.findViewById(R.id.ratingDisplay);
+        childRatingBar.setRating(childScore);
+        
+        
         return convertView;
     }
  
