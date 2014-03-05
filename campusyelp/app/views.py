@@ -64,7 +64,7 @@ def menu(request):
 def reviews(request, food_id):
     if request.method == "GET":
         foods = Food.objects.filter(id=food_id)
-        if (len(food) < 1):
+        if (len(foods) < 1):
             return HttpResponseNotFound();
         food = foods[0]
         reviews = Review.objects.filter(food_id=food_id)
