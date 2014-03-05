@@ -63,15 +63,20 @@ def menu(request):
 @csrf_exempt
 def reviews(request, food_id):
     if request.method == "GET":
-        reviews = Review.objects.filter(food_id=food_id);
+        food = Food.objects.filter(id=food_id)[0]
+        reviews = Review.objects.filter(food_id=food_id)
         dict_list = [JsonHelper.buildReviewDict(r) for r in reviews]
-        json_obj = {"reviews": dict_list}
+        json_obj = {"rating": food.rating, "reviews": dict_list}
         return HttpResponse(json.dumps(json_obj), content_type="application/json")
     elif request.method == "POST": 
         try:
             r = JsonHelper.buildReviewFromJson(request.body, food_id)
             try:
                 r.save()
+                oldtotal = food.rating * float(food.numreviews)
+                food.numreviews++
+                food.rating = (oldtotal + r.rating) / food.numreviews
+                food.save()
                 return HttpResponse(status=201)
             except:
                 return HttpResponseServerError("Could not save review to database")

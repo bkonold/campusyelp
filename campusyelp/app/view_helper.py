@@ -13,7 +13,4 @@ class ViewHelper:
                 foods[i] = {"title": f.title, "id": f.id, "rating": 0}
             else:
                 f = Food.objects.filter(title=food)[0]
-                reviews = Review.objects.filter(food_id=f.id)
-                rating_total = reduce((lambda x,y: x+y), [r.rating for r in reviews], 0)
-                rating = 0 if len(reviews) == 0 else rating_total/float(len(reviews))
-                foods[i] = {"title": f.title, "id": f.id, "rating": rating}
+                foods[i] = {"title": f.title, "id": f.id, "rating": f.rating}
