@@ -101,7 +101,9 @@ public class MealActivity extends ExpandableListActivity {
         {
     		// Before anything runs, show loading message
     		// Respond to back button (cancel loading)
-            myProgressDialog= ProgressDialog.show(MealActivity.this, "Just a Second!", "Loading Menus...", 
+    		
+    		
+            myProgressDialog= ProgressDialog.show(MealActivity.this, "Just a Second!", "Loading " + selectedEntree.getTitle(), 
             		true, true,  new DialogInterface.OnCancelListener(){
                         @Override
                         public void onCancel(DialogInterface dialog) {

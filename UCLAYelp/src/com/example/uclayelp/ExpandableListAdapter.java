@@ -61,7 +61,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         		.findViewById(R.id.ratingDisplay);
         childRatingBar.setRating(childScore);
         
-        
         return convertView;
     }
  
