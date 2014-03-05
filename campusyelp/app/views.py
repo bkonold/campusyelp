@@ -63,7 +63,7 @@ def menu(request):
 @csrf_exempt
 def reviews(request, food_id):
     if request.method == "GET":
-        food = Food.objects.filter(id=food_id)[0]
+        food = Food.objects.filter(id=food_id)
         reviews = Review.objects.filter(food_id=food_id)
         dict_list = [JsonHelper.buildReviewDict(r) for r in reviews]
         json_obj = {"rating": food.rating, "reviews": dict_list}
