@@ -64,6 +64,8 @@ def menu(request):
 def reviews(request, food_id):
     if request.method == "GET":
         food = Food.objects.filter(id=food_id)
+        if (len(food) < 1):
+            return HttpResponseNotFound();
         reviews = Review.objects.filter(food_id=food_id)
         dict_list = [JsonHelper.buildReviewDict(r) for r in reviews]
         json_obj = {"rating": food.rating, "reviews": dict_list}
