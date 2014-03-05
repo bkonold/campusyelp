@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
@@ -166,7 +167,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 				//TODO: delete title from json string later
 			    String content = userInput.getText().toString();
 			    Float rating = ratingBar.getRating();
-			    String json = "{\"title\":\"blah\", \"content\":\"" + content + "\", \"rating\":\"" + rating.toString() + "\"}";
+			    String json = "{\"content\":\"" + content + "\", \"rating\":" + rating.toString() + "}";
 			    new PostReviewTask().execute(json);
 			  }
 			});
