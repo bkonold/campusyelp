@@ -74,7 +74,7 @@ def reviews(request, food_id):
             try:
                 r.save()
                 oldtotal = food.rating * float(food.numreviews)
-                food.numreviews++
+                food.numreviews += 1
                 food.rating = (oldtotal + r.rating) / food.numreviews
                 food.save()
                 return HttpResponse(status=201)
