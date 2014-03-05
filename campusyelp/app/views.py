@@ -73,6 +73,10 @@ def reviews(request, food_id):
         return HttpResponse(json.dumps(json_obj), content_type="application/json")
     elif request.method == "POST": 
         try:
+            foods = Food.objects.filter(id=food_id)
+            if (len(foods) < 1):
+                return HttpResponseNotFound();
+            food = foods[0]
             r = JsonHelper.buildReviewFromJson(request.body, food_id)
             try:
                 r.save()
