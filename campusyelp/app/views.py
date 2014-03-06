@@ -78,7 +78,7 @@ def reviews(request, food_id):
             if (len(foods) < 1):
                 return HttpResponseNotFound();
             food = foods[0]
-            r = buildReviewFromJson(request.body, food_id)
+            r = model_helper.buildReviewFromJson(request.body, food_id)
             try:
                 r.save()
                 oldtotal = food.rating * float(food.numreviews)
@@ -103,7 +103,7 @@ def images(request, food_id):
         try:
             img_dir = open(img_base_path, 'r')
         except:
-            return HttpResponseNotFound("No images - directory does not exist")
+            return HttpResponseNotFound("No images - directory %s does not exist" % img_base_path)
 
         max_id = view_helper.getMaxId(img_base_path)
 
