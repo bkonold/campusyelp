@@ -118,8 +118,24 @@ public class MainActivity extends Activity implements OnClickListener {
         Intent intent = new Intent(this, DisplayMenusActivity.class);
         intent.putExtra(Constants.DINING_HALL, diningHall);
         intent.putExtra(Constants.JSON_OBJ_MENU, menu);
-        if (menu.getLunchMenu() != null)
-        	startActivity(intent);
+        try { 
+	        if (menu.getLunchMenu() != null)
+	        	startActivity(intent);
+        } catch (NullPointerException e) {
+        	 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+     	    builder.setMessage("Can't establish a connection to the server.  Please try again!")
+     	           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+     	        	   public void onClick(DialogInterface dialog,int id) {
+    					       // if this button is clicked, just close
+    						   // the dialog box and do nothing
+    						   dialog.cancel();
+    					   }
+ 		    });
+     	    
+     	    AlertDialog alertDialog = builder.create();
+     	    alertDialog.show();
+        }
+     
     }
     
 
