@@ -1,5 +1,6 @@
 package com.example.uclayelp;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -188,10 +190,18 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		 File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
 		// iv = (ImageView) findViewById(R.id.imageView1);
-		 Bitmap bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250);
+		 Bitmap imageBitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250);
 		 //iv.setImageBitmap(bitmap);
 		 
 		 //TODO: post to server
+		 // POST TO SERVER
+		 ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+		 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object   
+		 byte[] byteArrayImage = baos.toByteArray(); 
+		 
+		 String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+		 String json = "{\"base64\":\"" + encodedImage + "\" }";
+		 new PostImageTask().execute(json);
 	}
 	
 	public static Bitmap decodeSampledBitmapFromFile(String path,
@@ -300,5 +310,67 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     		
     	}
     }
+	// End PostReviewTask
+	
+	private class PostImageTask extends AsyncTask<String, Void, Integer> {
+        // For loading message
+    	ProgressDialog myProgressDialog;
+    
+    	@Override
+        protected void onPreExecute()
+        {// Before anything runs, show loading message
+    		// Respond to back button (cancel loading)
+            myProgressDialog= ProgressDialog.show(EntreeDetailsActivity.this, "Just a Second!", "Sending image...", 
+            		true, true,  new DialogInterface.OnCancelListener(){
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        	myProgressDialog.dismiss();
+                        }
+            }
+            );
+        }; 
+    	
+    	@Override
+    	protected Integer doInBackground (String... params) {
+    		String url = Constants.REVIEWS_BASE_URL + eid;
+            Integer success = 0; // set to 1 when post succeeds
+            String json = params[0];
+            Log.w("tag", json);
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            
+            try {
+
+                HttpPost httppost = new HttpPost(url);
+                httppost.setHeader("Content-type", "application/json");
+
+                StringEntity se = new StringEntity(json); 
+                se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                httppost.setEntity(se); 
+
+                HttpResponse response = httpClient.execute(httppost);
+                String temp = EntityUtils.toString(response.getEntity());
+                Log.w("tag", temp);
+                success = 1;
+
+            } catch (Exception e) {
+            	Log.w("postreview", e.getMessage());
+            }
+            return success;
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(Integer result) {
+    		myProgressDialog.dismiss();
+    		AlertDialog.Builder builder = new AlertDialog.Builder(EntreeDetailsActivity.this);
+    		if (result == 1) { 			
+    			builder.setMessage("Image submitted.");
+    		} else {
+    			builder.setMessage("There was an error submitting your image. Please try again.");
+    		}
+    		
+    	}
+    }
+    
+
     
 }
