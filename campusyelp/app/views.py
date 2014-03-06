@@ -103,7 +103,7 @@ def images(request, food_id):
         try:
             img_dir = open(img_base_path, 'r')
         except:
-            return HttpResponseNotFound("No images")
+            return HttpResponseNotFound("No images - directory does not exist")
 
         max_id = view_helper.getMaxId(img_base_path)
 
