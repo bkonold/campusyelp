@@ -121,8 +121,9 @@ public class MainActivity extends Activity implements OnClickListener {
         try { 
 	        if (menu.getLunchMenu() != null)
 	        	startActivity(intent);
+	       // No active Internet connection
         } catch (NullPointerException e) {
-        	 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
      	    builder.setMessage("Can't establish a connection to the server.  Please try again!")
      	           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
      	        	   public void onClick(DialogInterface dialog,int id) {

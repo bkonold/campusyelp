@@ -252,7 +252,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 			reviewContent.add(i, reviews.get(i).getContent());
 		}
 		
-		CustomListAdapter listAdapter = new CustomListAdapter(EntreeDetailsActivity.this , R.layout.custom_list , reviewContent);
+		CustomListAdapter listAdapter = new CustomListAdapter
+				(EntreeDetailsActivity.this , R.layout.review_item_list , reviewContent);
 		lv.setAdapter(listAdapter);
 	}
 	
@@ -279,17 +280,17 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	            mView = vi.inflate(id, null);
 	        }
 
-	        TextView text = (TextView) mView.findViewById(R.id.textView);
+	        TextView text = (TextView) mView.findViewById(R.id.reviewListItem);
 
-	        if(items.get(position) != null )
+	        if(items.get(position) != null)
 	        {
 	            text.setTextColor(Color.WHITE);
-	            text.setText(items.get(position));
+/*	            text.setBackgroundColor(Color.BLACK);
+	            text.setText(items.get(position));*/
 	        }
 
 	        return mView;
 	    }
-
 	}
 	 
 	private class PostReviewTask extends AsyncTask<String, Void, Integer> {
