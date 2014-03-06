@@ -1,5 +1,8 @@
 package com.example.uclayelp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -36,6 +39,28 @@ public class MainActivity extends Activity implements OnClickListener {
         feastButton.setOnClickListener(this);
     }
 
+    // Use this to set the size of the buttons to the longest one (Feast at Reiber)
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        // Call here getWidth() and getHeight()
+        List<Button> allButtons = new ArrayList<Button>();
+        allButtons.add( (Button) findViewById(R.id.button1));
+        allButtons.add( (Button) findViewById(R.id.button2));
+        allButtons.add( (Button) findViewById(R.id.button3));
+        allButtons.add( (Button) findViewById(R.id.button4));
+        
+        int maxWidth = 0;
+        for (Button button : allButtons){
+        	int curButtonWidth = button.getWidth();
+        	if (curButtonWidth > maxWidth)
+        		maxWidth = curButtonWidth;
+        }
+        for (Button button : allButtons){
+        	button.setWidth(maxWidth);
+        }
+
+     }
     
     @Override
     public void onClick(View v){

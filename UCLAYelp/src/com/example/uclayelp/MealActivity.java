@@ -92,7 +92,7 @@ public class MealActivity extends ExpandableListActivity {
 	}
 	
 	
-	private class GetReviewsTask extends AsyncTask<Integer, Void, ArrayList<Review>> {
+	private class GetReviewsTask extends AsyncTask<Integer, Void, RatingAndReviews> {
         // For loading message
     	ProgressDialog myProgressDialog;
     
@@ -101,7 +101,6 @@ public class MealActivity extends ExpandableListActivity {
         {
     		// Before anything runs, show loading message
     		// Respond to back button (cancel loading)
-    		
     		
             myProgressDialog= ProgressDialog.show(MealActivity.this, "Just a Second!", "Loading " + selectedEntree.getTitle(), 
             		true, true,  new DialogInterface.OnCancelListener(){
@@ -114,20 +113,20 @@ public class MealActivity extends ExpandableListActivity {
         }; 
     	
     	@Override
-    	protected ArrayList<Review> doInBackground (Integer... params) {
+    	protected RatingAndReviews doInBackground (Integer... params) {
     		Integer entree_id = params[0];
     		
     		JSONParser parser = new JSONParser();
-    		return parser.getReviewsFromJson(entree_id);
+    		return parser.getRatingAndReviewsFromJson(entree_id);
     	}
     	
     	@Override
-    	protected void onPostExecute(ArrayList<Review> result) {
+    	protected void onPostExecute(RatingAndReviews result) {
     		Intent i = new Intent(getApplicationContext(), EntreeDetailsActivity.class);
     		i.putExtra(Constants.ENTREE,  selectedEntree.getTitle());
-    		i.putExtra(Constants.RATING, selectedEntree.getRating());
+    		i.putExtra(Constants.RATING, result.getRating());
     		i.putExtra(Constants.EID, selectedEntree.getId());
-    		i.putExtra(Constants.REVIEWS, result);
+    		i.putExtra(Constants.REVIEWS, result.getReviews());
     		
     		startActivity(i);
     		myProgressDialog.dismiss();

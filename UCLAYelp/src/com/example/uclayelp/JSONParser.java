@@ -92,9 +92,11 @@ public class JSONParser {
         return menu;
     }
 
-    public ArrayList<Review> getReviewsFromJson(int eid) {
+    public RatingAndReviews getRatingAndReviewsFromJson(int eid) {
     	String url = Constants.REVIEWS_BASE_URL + eid;
+    	float averageRating;
     	ArrayList<Review> reviews = new ArrayList<Review>();
+    	RatingAndReviews r = null;
     	
     	 // Making HTTP request
         try {
@@ -106,18 +108,20 @@ public class JSONParser {
             HttpEntity httpEntity = httpResponse.getEntity();
             String s =  EntityUtils.toString(httpEntity);
             JSONObject jObj = new JSONObject(s);
+            averageRating = (float) jObj.getDouble("rating");
             JSONArray reviewsArray = jObj.getJSONArray("reviews");
             for (int i = 0; i < reviewsArray.length(); i++) {
             	JSONObject reviewObj = reviewsArray.getJSONObject(i);
             	String content = reviewObj.getString("content");
             	if (!content.equals("")) {
-            		float rating = (float) reviewObj.getDouble("rating");
-            		Review review = new Review(content, rating);
+            		float reviewRating = (float) reviewObj.getDouble("rating");
+            		Review review = new Review(content, reviewRating);
             		reviews.add(review);
             	}
             	
             }
 
+            r = new RatingAndReviews(averageRating, reviews);
 
 	    		
         } catch (Exception e) {
@@ -126,7 +130,7 @@ public class JSONParser {
 				
         }
 	
-    	return reviews;
+    	return r;
     	
     }
     
