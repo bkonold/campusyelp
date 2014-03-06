@@ -138,10 +138,11 @@ def image(request, food_id, img_id):
         try:
             try:
                 f = open(file_path, 'r')
-                base64 = base64.encodestring(img_data.read())
+                img64 = base64.b64encode(f.read())
                 f.close()
-                return HttpResponse(json.dump({'base64': base64}), content_type="application/json")
-            except:
+		d = {"base64": img64}
+                return HttpResponse(json.dumps(d), content_type="application/json")
+            except IOError:
                 return HttpResponseNotFound("Image doesn't exist")
         except:
             return HttpResponseNotFound("Image does not exist: <br>" + file_path)
