@@ -287,9 +287,9 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 
 	        if(items.get(position) != null)
 	        {
-	            text.setTextColor(Color.WHITE);
-/*	            text.setBackgroundColor(Color.BLACK);
-	            text.setText(items.get(position));*/
+	            text.setTextColor(Color.BLACK);
+//	            text.setBackgroundColor(Color.BLACK);
+	            text.setText(items.get(position));
 	        }
 
 	        return mView;
