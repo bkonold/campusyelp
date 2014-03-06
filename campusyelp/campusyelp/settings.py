@@ -68,7 +68,7 @@ DATABASES = {
         'NAME': 'campusyelp',
         'USER': 'root',
         'PASSWORD': 'ucla',
-        'HOST': '54.186.3.129',   # Or an IP Address that your DB is hosted on
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }

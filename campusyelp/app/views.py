@@ -20,42 +20,42 @@ def menu(request):
 
     for l in scraped_menus.covelLunch:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["covel"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.deneveLunch:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["deneve"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.bpLunch:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["bp"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.feastLunch:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["feast"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.covelDinner:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["covel"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.deneveDinner:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["deneve"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.bpDinner:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["bp"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.feastDinner:
         foodList = l[1:]
-        addOrFetch(foodList)
+        view_helper.addOrFetch(foodList)
         menus["feast"]["dinner"].append({"station": l[0], "items": foodList})
 
 
@@ -69,7 +69,7 @@ def reviews(request, food_id):
             return HttpResponseNotFound();
         food = foods[0]
         reviews = Review.objects.filter(food_id=food_id)
-        dict_list = [buildReviewDict(r) for r in reviews]
+        dict_list = [model_helper.buildReviewDict(r) for r in reviews]
         json_obj = {"rating": food.rating, "reviews": dict_list}
         return HttpResponse(json.dumps(json_obj), content_type="application/json")
     elif request.method == "POST": 
@@ -105,7 +105,7 @@ def images(request, food_id):
         except:
             return HttpResponseNotFound("No images")
 
-        max_id = getMaxId(img_base_path)
+        max_id = view_helper.getMaxId(img_base_path)
 
         if max_id == 0:
             return HttpResponseNotFound("No images")
@@ -118,7 +118,7 @@ def images(request, food_id):
             d = json.loads(request.body)
             try:
                 if os.path.isfile(img_base_path):
-                    img_id = getMaxId(img_base_path)+1
+                    img_id = view_helper.getMaxId(img_base_path)+1
                 else:
                     img_id = 1
                 img_file = open("%s/%d.jpg" % (img_base_path,img_id), "w")
