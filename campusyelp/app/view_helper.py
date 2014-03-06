@@ -1,4 +1,5 @@
 from models import *
+import os
 
 def addOrFetch(foods):
     for i in range(0, len(foods)):
@@ -14,7 +15,7 @@ def addOrFetch(foods):
 
 def getMaxId(img_dir):
     max_id = 0
-    for filename in os.listdir(img_base_path):
+    for filename in os.listdir(img_dir):
         if filename.endswith(".jpg"):
             i_id = int(os.path.splitext(filename)[0])
             max_id = i_id if i_id > max_id else max_id

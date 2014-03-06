@@ -100,10 +100,8 @@ def images(request, food_id):
     #return highest id of all existing images for food_id, or return 404 Not Found if none
     if request.method == "GET":
 
-        try:
-            img_dir = open(img_base_path, 'r')
-        except:
-            return HttpResponseNotFound("No images - directory %s does not exist" % img_base_path)
+        if not os.path.isdir(img_base_path):
+            return HttpResponseNotFound("No images")
 
         max_id = view_helper.getMaxId(img_base_path)
 
@@ -117,7 +115,7 @@ def images(request, food_id):
         try:
             d = json.loads(request.body)
             try:
-                if os.path.isfile(img_base_path):
+                if os.path.isdir(img_base_path):
                     img_id = view_helper.getMaxId(img_base_path)+1
                 else:
                     img_id = 1
@@ -138,9 +136,13 @@ def image(request, food_id, img_id):
         file_name = "%s.jpg" % img_id
         file_path = "/".join([img_base_path, file_name])
         try:
-            with open(file_path, "r") as img_data:
+            try:
+                f = open(file_path, 'r')
                 base64 = base64.encodestring(img_data.read())
+                f.close()
                 return HttpResponse(json.dump({'base64': base64}), content_type="application/json")
+            except:
+                return HttpResponseNotFound("Image doesn't exist")
         except:
             return HttpResponseNotFound("Image does not exist: <br>" + file_path)
     else: 

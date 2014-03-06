@@ -56,6 +56,9 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	private int eid;
 
 	private ListView lv;
+	private RatingBar ratingBar;
+	private ArrayList<Review> reviews;
+	
 	
 
 	
@@ -87,7 +90,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         addReviewButton.setOnClickListener(this);
         
         // Rating bar
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
         float buttonRating = i.getFloatExtra(Constants.RATING, 0);
         ratingBar.setRating(buttonRating); 
         ratingBar.setOnTouchListener(new OnTouchListener() {
@@ -99,7 +102,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         
         // List of reviews
         lv = (ListView) findViewById(R.id.listView1);  
-        ArrayList<Review> reviews = new ArrayList<Review>();
+        reviews = new ArrayList<Review>();
         reviews = i.getParcelableArrayListExtra(Constants.REVIEWS);
         setListView(reviews);
         
@@ -391,6 +394,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
                 HttpResponse response = httpClient.execute(httppost);
                 String temp = EntityUtils.toString(response.getEntity());
                 Log.w("tag", temp);
+                new GetReviewsTask().execute(eid);
                 success = 1;
 
             } catch (Exception e) {
@@ -410,8 +414,25 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     		}
     		
     	}
-    }
-    
+	}
 
-    
+	private class GetReviewsTask extends AsyncTask<Integer, Void, RatingAndReviews> {
+    	
+    	@Override
+    	protected RatingAndReviews doInBackground (Integer... params) {
+    		Integer entree_id = params[0];
+    		
+    		JSONParser parser = new JSONParser();
+    		return parser.getRatingAndReviewsFromJson(entree_id);
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(RatingAndReviews result) {
+    		ratingBar.setRating(result.getRating());
+    		reviews = result.getReviews();
+    		setListView(reviews);
+    		
+    	}
+	} // end GetReviewsTask
 }
+    
