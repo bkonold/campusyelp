@@ -136,9 +136,13 @@ def image(request, food_id, img_id):
         file_name = "%s.jpg" % img_id
         file_path = "/".join([img_base_path, file_name])
         try:
-            with open(file_path, "r") as img_data:
+            try:
+                f = open(file_path, 'r')
                 base64 = base64.encodestring(img_data.read())
+                f.close()
                 return HttpResponse(json.dump({'base64': base64}), content_type="application/json")
+            except:
+                return HttpResponseNotFound("Image doesn't exist")
         except:
             return HttpResponseNotFound("Image does not exist: <br>" + file_path)
     else: 
