@@ -3,6 +3,7 @@ package com.example.uclayelp;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -16,10 +17,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -35,12 +38,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
@@ -242,15 +247,50 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	/** Populate list of reviews .*/
 	
 	private void setListView(ArrayList<Review> reviews) {
-		String [] reviewContent = new String [reviews.size()];
+		List<String> reviewContent = new ArrayList<String>();
 		for (int i = 0; i < reviews.size(); i++) {
-			reviewContent[i] = reviews.get(i).getContent();
+			reviewContent.add(i, reviews.get(i).getContent());
 		}
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, reviewContent);
-		lv.setAdapter(adapter);
+		CustomListAdapter listAdapter = new CustomListAdapter(EntreeDetailsActivity.this , R.layout.custom_list , reviewContent);
+		lv.setAdapter(listAdapter);
 	}
+	
+	private class CustomListAdapter extends ArrayAdapter {
 
+	    private Context mContext;
+	    private int id;
+	    private List <String>items ;
+
+	    public CustomListAdapter(Context context, int textViewResourceId , List<String> list ) 
+	    {
+	        super(context, textViewResourceId, list);           
+	        mContext = context;
+	        id = textViewResourceId;
+	        items = list ;
+	    }
+
+	    @Override
+	    public View getView(int position, View v, ViewGroup parent)
+	    {
+	        View mView = v ;
+	        if(mView == null){
+	            LayoutInflater vi = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	            mView = vi.inflate(id, null);
+	        }
+
+	        TextView text = (TextView) mView.findViewById(R.id.textView);
+
+	        if(items.get(position) != null )
+	        {
+	            text.setTextColor(Color.WHITE);
+	            text.setText(items.get(position));
+	        }
+
+	        return mView;
+	    }
+
+	}
 	 
 	private class PostReviewTask extends AsyncTask<String, Void, Integer> {
         // For loading message
