@@ -3,10 +3,11 @@ from menu_scraper import MenuScraper
 from django.http import *
 from django.views.decorators.csrf import csrf_exempt
 from models import *
-from model_helper import JsonHelper
-from view_helper import ViewHelper
+import model_helper
+import view_helper
 
 import os
+import base64
 import json
 # Create your views here.
 # request: the request object
@@ -19,42 +20,42 @@ def menu(request):
 
     for l in scraped_menus.covelLunch:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["covel"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.deneveLunch:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["deneve"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.bpLunch:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["bp"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.feastLunch:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["feast"]["lunch"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.covelDinner:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["covel"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.deneveDinner:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["deneve"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.bpDinner:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["bp"]["dinner"].append({"station": l[0], "items": foodList})
 
     for l in scraped_menus.feastDinner:
         foodList = l[1:]
-        ViewHelper.addOrFetch(foodList)
+        addOrFetch(foodList)
         menus["feast"]["dinner"].append({"station": l[0], "items": foodList})
 
 
@@ -68,7 +69,7 @@ def reviews(request, food_id):
             return HttpResponseNotFound();
         food = foods[0]
         reviews = Review.objects.filter(food_id=food_id)
-        dict_list = [JsonHelper.buildReviewDict(r) for r in reviews]
+        dict_list = [buildReviewDict(r) for r in reviews]
         json_obj = {"rating": food.rating, "reviews": dict_list}
         return HttpResponse(json.dumps(json_obj), content_type="application/json")
     elif request.method == "POST": 
@@ -77,7 +78,7 @@ def reviews(request, food_id):
             if (len(foods) < 1):
                 return HttpResponseNotFound();
             food = foods[0]
-            r = JsonHelper.buildReviewFromJson(request.body, food_id)
+            r = buildReviewFromJson(request.body, food_id)
             try:
                 r.save()
                 oldtotal = food.rating * float(food.numreviews)
@@ -95,21 +96,16 @@ def reviews(request, food_id):
 
 @csrf_exempt
 def images(request, food_id):
+    img_base_path = os.path.join(os.path.abspath("."), "images/%s" % food_id)
     #return highest id of all existing images for food_id, or return 404 Not Found if none
     if request.method == "GET":
-        img_base_path = os.path.join(os.path.abspath("."), "images/%s" % food_id)
 
         try:
             img_dir = open(img_base_path, 'r')
         except:
             return HttpResponseNotFound("No images")
 
-        max_id = 0
-
-        for filename in os.listdir(img_base_path):
-            if filename.endswith(".jpg"):
-                i_id = int(os.path.splitext(filename)[0])
-                max_id = i_id if i_id > max_id else max_id
+        max_id = getMaxId(img_base_path)
 
         if max_id == 0:
             return HttpResponseNotFound("No images")
@@ -118,9 +114,22 @@ def images(request, food_id):
 
     #save the image encoded in the post request to the proper location
     elif request.method == "POST":
-        return HttpResponse("Implement Me!")
+        try:
+            d = json.loads(request.body)
+            try:
+                if os.path.isfile(img_base_path):
+                    img_id = getMaxId(img_base_path)+1
+                else:
+                    img_id = 1
+                img_file = open("%s/%d.jpg" % (img_base_path,img_id), "w")
+                img_file.write(base64.decodestring(d["base64"]))
+                img_file.close()
+            except:
+                return HttpResponseServerError("Unable to save image :(")
+        except: 
+            return HttpResponseBadRequest("Invalid POST data!")
     else:
-        return HttpResponseBadRequest("This endpoint only supports get and post!") 
+        return HttpResponseBadRequest("This endpoint only supports GET and POST!") 
 
 @csrf_exempt
 def image(request, food_id, img_id):
@@ -129,8 +138,9 @@ def image(request, food_id, img_id):
         file_name = "%s.jpg" % img_id
         file_path = "/".join([img_base_path, file_name])
         try:
-            img_data = open(file_path, "r").read()
-            return HttpResponse(img_data, mimetype="image/jpg")
+            with open(file_path, "r") as img_data:
+                base64 = base64.encodestring(img_data.read())
+                return HttpResponse(json.dump({'base64': base64}), content_type="application/json")
         except:
             return HttpResponseNotFound("Image does not exist: <br>" + file_path)
     else: 
