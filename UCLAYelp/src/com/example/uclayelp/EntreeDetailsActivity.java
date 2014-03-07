@@ -57,12 +57,9 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	private String entree;
 	private int eid;
 
-	private ListView lv;
 	private RatingBar ratingBar;
 	private ArrayList<Review> reviews;
 	
-	
-
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +103,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         averageText.setText(String.format("%.02f", buttonRating) + " overall");
         
         // List of reviews
-        lv = (ListView) findViewById(R.id.listView1);  
         reviews = new ArrayList<Review>();
         reviews = i.getParcelableArrayListExtra(Constants.REVIEWS);
         setListView(reviews);
@@ -265,13 +261,14 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		CustomListAdapter listAdapter = new CustomListAdapter
 				(EntreeDetailsActivity.this , R.layout.review_item_list , 
 						reviewContent, reviewRatings);
-		// lv.setAdapter(listAdapter);
 		
-		LinearLayout ll = (LinearLayout) findViewById(R.id.listView1); //this should be the vertical LinearLayout that you substituted the listview with
-		for(int i=0;i<listAdapter.getCount();i++) {
-		    View v = listAdapter.getView(i, null, null);
-		    ll.addView(v, i, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 
-		    		LinearLayout.LayoutParams.WRAP_CONTENT));
+		LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
+		
+		ll.removeAllViews();
+		
+		for (int i = 0; i < listAdapter.getCount(); i++){
+			View item = listAdapter.getView(i, null, null);
+			ll.addView(item);
 		}
 	}
 	

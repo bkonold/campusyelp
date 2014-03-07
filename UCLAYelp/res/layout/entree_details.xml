@@ -56,13 +56,14 @@
 					     android:layout_height="4dp"
 					     android:background="@drawable/line_separator"/>
 
-				        <ListView
-				            android:id="@+id/listView1"
-				            android:layout_width="match_parent"
-				            android:layout_height="wrap_content">
-				        </ListView>
 				        
-				     
+			        <LinearLayout
+			            android:id="@+id/ll"
+			            android:layout_width="match_parent"
+					    android:layout_height="match_parent"
+					    android:gravity="center_horizontal"
+					    android:orientation="vertical" />
+				            		    
 			        
 					this is a divider
 					<View
