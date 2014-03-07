@@ -56,8 +56,10 @@ public class MainActivity extends Activity implements OnClickListener {
         	if (curButtonWidth > maxWidth)
         		maxWidth = curButtonWidth;
         }
+        
         for (Button button : allButtons){
         	button.setWidth(maxWidth);
+        	button.setHeight(maxWidth/2);
         }
 
      }

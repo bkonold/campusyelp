@@ -101,6 +101,9 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         });
         ratingBar.setFocusable(false);
         
+        TextView averageText = (TextView) findViewById(R.id.average_rating);
+        averageText.setText(buttonRating + " overall");
+        
         // List of reviews
         lv = (ListView) findViewById(R.id.listView1);  
         reviews = new ArrayList<Review>();
@@ -449,6 +452,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     		reviews = result.getReviews();
     		setListView(reviews);
     		
+    		TextView averageText = (TextView) findViewById(R.id.average_rating);
+            averageText.setText(result.getRating() + " overall");
     	}
 	} // end GetReviewsTask
 }

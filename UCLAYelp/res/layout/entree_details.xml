@@ -2,6 +2,7 @@
  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
      android:layout_height="fill_parent" >
+     
             
 			<LinearLayout
 			    android:layout_width="match_parent"
@@ -12,74 +13,134 @@
 			    android:focusable="true" 
 			    android:focusableInTouchMode="true">
 
-				<RelativeLayout
-				    android:layout_width="match_parent"
-				    android:layout_height="match_parent"
-				    android:gravity="center_horizontal"
-				    android:orientation="vertical" >
-
-				    <Button
-				        android:id="@+id/review_button"
-				        android:layout_width="wrap_content"
+			    	<TextView
+				        android:id="@+id/product_label2"
+				        android:layout_width="match_parent"
 				        android:layout_height="wrap_content"
-				        android:layout_alignParentTop="true"
-				        android:layout_centerHorizontal="true"
-				        android:background="@drawable/add_review_selector"
-				        android:scaleX="0.6"
-				        android:scaleY="0.6" />
-
-				    <Button
-				        android:id="@+id/camera_button"
-				        android:layout_width="wrap_content"
-				        android:layout_height="wrap_content"
-				        android:layout_alignParentTop="true"
-				        android:layout_alignRight="@+id/review_button"
-				        android:layout_marginRight="82dp"
-				        android:background="@drawable/add_photo_selector"
-				        android:scaleX="0.6"
-				        android:scaleY="0.6" />
+				        android:gravity="center"
+				        android:text="User Ratings and Reviews"
+				        android:textStyle="bold"
+				        android:textColor="#000000"
+				        android:textSize="16sp" >   
+				    </TextView>
+	
+	
+					<RelativeLayout
+					    android:layout_width="match_parent"
+					    android:layout_height="match_parent"
+					    android:gravity="center_horizontal"
+					    android:orientation="vertical" >
+									
+						<RatingBar
+						    android:id="@+id/ratingBar1"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:scaleX=".65" 
+						    android:scaleY=".65"/>
+	
+						<TextView
+						    android:id="@+id/average_rating"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:layout_toRightOf="@+id/ratingBar1"
+						    android:layout_centerVertical="true"
+						    android:textSize="10sp"
+						    android:text="AVG REVIEW SCORE" />
+						
+					</RelativeLayout>
+					
+					<View
+					     android:layout_width="fill_parent"
+					     android:layout_height="4dp"
+					     android:background="@drawable/line_separator"/>
+	
+			        <ListView
+			            android:id="@+id/listView1"
+			            android:layout_width="match_parent"
+			            android:layout_height="366dp"
+			            android:stackFromBottom="False" >
+			        </ListView>
+			        
+					this is a divider
+					<View
+					     android:layout_width="fill_parent"
+					     android:layout_height="30dp" />
 				    
-				</RelativeLayout>
-
-				<RatingBar
-				    android:id="@+id/ratingBar1"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content" />
-			    
-			    <TextView
-			        android:id="@+id/product_label"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:gravity="left"
-			        android:padding="5dip"
-			        android:text="Photos for "
-			        android:textColor="#ffffff"
-			        android:textSize="16sp" >   
-			    </TextView>
-			    
-				<View
-				     android:layout_width="fill_parent"
-				     android:layout_height="4dp"
-				     android:background="#c0c0c0"/>
-
-				<ImageButton
-				    android:id="@+id/imageButton1"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:src="@drawable/breakfast" />
-				
-				<View
-				     android:layout_width="fill_parent"
-				     android:layout_height="4dp"
-				     android:padding="100dip"
-				     android:background="#c0c0c0"/>
-
-		        <ListView
-		            android:id="@+id/listView1"
-		            android:layout_width="match_parent"
-		            android:layout_height="366dp"
-		            android:stackFromBottom="False" >
-		        </ListView>
+				    <TextView
+				        android:id="@+id/product_label"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:gravity="center"
+				        android:padding="5dip"
+				        android:text="Submitted Photos"
+				        android:textStyle="bold"
+				        android:textColor="#000000"
+				        android:textSize="16sp" >   
+				    </TextView>
+				    
+					<View
+					     android:layout_width="fill_parent"
+					     android:layout_height="4dp"
+					     android:paddingBottom="10dp"
+					     android:background="@drawable/line_separator"/>
+	
+					<ImageButton
+					    android:id="@+id/imageButton1"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:src="@drawable/breakfast" />
+					
+					this is a divider
+					<View
+					     android:layout_width="fill_parent"
+					     android:layout_height="30dp" />
+					
+			        
+			        <TextView
+				        android:id="@+id/product_label"
+				        android:layout_width="match_parent"
+				        android:layout_height="wrap_content"
+				        android:gravity="center"
+				        android:padding="5dip"
+				        android:text="Help us out! Submit a review"
+				        android:textStyle="bold"
+				        android:textColor="#000000"
+				        android:textSize="16sp" />   
+			
+					 <View
+					     android:layout_width="fill_parent"
+					     android:layout_height="4dp"
+					     android:paddingBottom="10dp"
+					     android:background="@drawable/line_separator"/>
 		
-			</LinearLayout>
+						<RelativeLayout
+						    android:layout_width="match_parent"
+						    android:layout_height="match_parent"
+						    android:gravity="center_horizontal"
+						    android:orientation="vertical" >
+		
+						    <Button
+						        android:id="@+id/review_button"
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:layout_alignParentTop="true"
+						        android:layout_centerHorizontal="true"
+						        android:background="@drawable/add_review_selector"
+						        android:scaleX="0.6"
+						        android:scaleY="0.6" />
+		
+						    <Button
+						        android:id="@+id/camera_button"
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:layout_alignParentTop="true"
+						        android:layout_alignRight="@+id/review_button"
+						        android:layout_marginRight="82dp"
+						        android:background="@drawable/add_photo_selector"
+						        android:scaleX="0.6"
+						        android:scaleY="0.6" />
+						    
+						</RelativeLayout>
+			
+				</LinearLayout>
 	</ScrollView>
