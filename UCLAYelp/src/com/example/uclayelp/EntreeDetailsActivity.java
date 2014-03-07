@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -296,6 +297,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	        if(items.get(position) != null)
 	        {
 	            text.setTextColor(Color.BLACK);
+	            text.setTypeface(null, Typeface.ITALIC);
 	            text.setText(items.get(position));
 	        }
 	        
