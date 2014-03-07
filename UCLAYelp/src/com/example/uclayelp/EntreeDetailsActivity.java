@@ -348,6 +348,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
                 HttpResponse response = httpClient.execute(httppost);
                 String temp = EntityUtils.toString(response.getEntity());
                 Log.w("tag", temp);
+
+                new GetReviewsTask().execute(eid);
                 success = 1;
 
             } catch (Exception e) {
@@ -408,7 +410,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
                 HttpResponse response = httpClient.execute(httppost);
                 String temp = EntityUtils.toString(response.getEntity());
                 Log.w("tag", temp);
-                new GetReviewsTask().execute(eid);
                 success = 1;
 
             } catch (Exception e) {
