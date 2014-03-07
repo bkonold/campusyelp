@@ -251,12 +251,17 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
 	private void setListView(ArrayList<Review> reviews) {
 		List<String> reviewContent = new ArrayList<String>();
+		List<Float> reviewRatings = new ArrayList<Float>();
 		for (int i = 0; i < reviews.size(); i++) {
 			reviewContent.add(i, reviews.get(i).getContent());
+			reviewRatings.add(i, reviews.get(i).getRating());
 		}
 		
+
+		
 		CustomListAdapter listAdapter = new CustomListAdapter
-				(EntreeDetailsActivity.this , R.layout.review_item_list , reviewContent);
+				(EntreeDetailsActivity.this , R.layout.review_item_list , 
+						reviewContent, reviewRatings);
 		lv.setAdapter(listAdapter);
 	}
 	
@@ -265,13 +270,16 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	    private Context mContext;
 	    private int id;
 	    private List <String>items ;
+	    private List <Float> ratings;
 
-	    public CustomListAdapter(Context context, int textViewResourceId , List<String> list ) 
+	    public CustomListAdapter(Context context, int textViewResourceId , 
+	    		List<String> list, List<Float> ratings ) 
 	    {
 	        super(context, textViewResourceId, list);           
 	        mContext = context;
 	        id = textViewResourceId;
 	        items = list ;
+	        this.ratings = ratings;
 	    }
 
 	    @Override
@@ -288,9 +296,15 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	        if(items.get(position) != null)
 	        {
 	            text.setTextColor(Color.BLACK);
-//	            text.setBackgroundColor(Color.BLACK);
 	            text.setText(items.get(position));
 	        }
+	        
+	        RatingBar reviewScore = (RatingBar) mView.findViewById(R.id.reviewRatingDisplay);
+	        if(ratings.get(position) != null)
+	        {
+	            reviewScore.setRating(ratings.get(position));
+	        }
+	        
 
 	        return mView;
 	    }
