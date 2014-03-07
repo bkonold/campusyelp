@@ -23,43 +23,46 @@
 				        android:textColor="#000000"
 				        android:textSize="16sp" >   
 				    </TextView>
-	
-	
-					<RelativeLayout
-					    android:layout_width="match_parent"
-					    android:layout_height="match_parent"
-					    android:gravity="center_horizontal"
-					    android:orientation="vertical" >
-									
-						<RatingBar
-						    android:id="@+id/ratingBar1"
-						    android:layout_width="wrap_content"
-						    android:layout_height="wrap_content"
-						    android:scaleX=".65" 
-						    android:scaleY=".65"/>
-	
-						<TextView
-						    android:id="@+id/average_rating"
-						    android:layout_width="wrap_content"
-						    android:layout_height="wrap_content"
-						    android:layout_toRightOf="@+id/ratingBar1"
-						    android:layout_centerVertical="true"
-						    android:textSize="10sp"
-						    android:text="AVG REVIEW SCORE" />
-						
-					</RelativeLayout>
+
+			    	<RelativeLayout
+			    	    android:layout_width="match_parent"
+			    	    android:layout_height="match_parent"
+			    	    android:orientation="vertical" >
+
+			    	    <TextView
+			    	        android:id="@+id/average_rating"
+			    	        android:layout_width="match_parent"
+			    	        android:layout_height="wrap_content"
+			    	        android:layout_alignParentBottom="true"
+			    	        android:layout_centerHorizontal="true"
+			    	        android:gravity="center"
+			    	        android:text="AVG REVIEW SCORE"
+			    	        android:textSize="10sp" />
+
+			    	    <RatingBar
+			    	        android:id="@+id/ratingBar1"
+			    	        android:layout_width="wrap_content"
+			    	        android:layout_height="wrap_content"
+			    	        android:layout_alignParentTop="true"
+			    	        android:layout_centerHorizontal="true"
+			    	        android:gravity="center_horizontal"
+			    	        android:scaleX=".65"
+			    	        android:scaleY=".65" />
+
+			    	</RelativeLayout>
 					
 					<View
 					     android:layout_width="fill_parent"
 					     android:layout_height="4dp"
 					     android:background="@drawable/line_separator"/>
-	
-			        <ListView
-			            android:id="@+id/listView1"
-			            android:layout_width="match_parent"
-			            android:layout_height="366dp"
-			            android:stackFromBottom="False" >
-			        </ListView>
+
+				        <ListView
+				            android:id="@+id/listView1"
+				            android:layout_width="match_parent"
+				            android:layout_height="wrap_content">
+				        </ListView>
+				        
+				     
 			        
 					this is a divider
 					<View

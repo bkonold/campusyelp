@@ -44,6 +44,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -102,7 +103,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         ratingBar.setFocusable(false);
         
         TextView averageText = (TextView) findViewById(R.id.average_rating);
-        averageText.setText(buttonRating + " overall");
+        averageText.setText(String.format("%.02f", buttonRating) + " overall");
         
         // List of reviews
         lv = (ListView) findViewById(R.id.listView1);  
@@ -261,12 +262,17 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 			reviewRatings.add(i, reviews.get(i).getRating());
 		}
 		
-
-		
 		CustomListAdapter listAdapter = new CustomListAdapter
 				(EntreeDetailsActivity.this , R.layout.review_item_list , 
 						reviewContent, reviewRatings);
-		lv.setAdapter(listAdapter);
+		// lv.setAdapter(listAdapter);
+		
+		LinearLayout ll = (LinearLayout) findViewById(R.id.listView1); //this should be the vertical LinearLayout that you substituted the listview with
+		for(int i=0;i<listAdapter.getCount();i++) {
+		    View v = listAdapter.getView(i, null, null);
+		    ll.addView(v, i, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 
+		    		LinearLayout.LayoutParams.WRAP_CONTENT));
+		}
 	}
 	
 	private class CustomListAdapter extends ArrayAdapter {
@@ -296,7 +302,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	        }
 
 	        TextView text = (TextView) mView.findViewById(R.id.reviewListItem);
-
 	        if(items.get(position) != null)
 	        {
 	            text.setTextColor(Color.BLACK);
@@ -310,7 +315,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	            reviewScore.setRating(ratings.get(position));
 	        }
 	        
-
 	        return mView;
 	    }
 	}
@@ -453,7 +457,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     		setListView(reviews);
     		
     		TextView averageText = (TextView) findViewById(R.id.average_rating);
-            averageText.setText(result.getRating() + " overall");
+            averageText.setText(String.format("%.02f", result.getRating()) + " overall");
     	}
 	} // end GetReviewsTask
 }
