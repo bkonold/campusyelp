@@ -43,5 +43,5 @@ public class Constants {
 	public static final String DINNER_MENU = "dinner menu";
 	
 	public static final String REVIEWS_BASE_URL = "http://54.186.3.129/app/reviews/";
-	
+	public static final String POST_IMG_URL = "http://54.186.3.129/app/images/";
 }

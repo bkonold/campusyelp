@@ -12,6 +12,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -45,10 +46,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
@@ -209,8 +208,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		 byte[] byteArrayImage = baos.toByteArray(); 
 		 
 		 String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
-		 String json = "{\"base64\":\"" + encodedImage + "\" }";
-		 new PostImageTask().execute(json);
+		 new PostImageTask().execute(encodedImage);
 	}
 	
 	public static Bitmap decodeSampledBitmapFromFile(String path,
@@ -396,23 +394,30 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
             );
         }; 
     	
-    	@Override
+        @Override
     	protected Integer doInBackground (String... params) {
-    		String url = Constants.REVIEWS_BASE_URL + eid;
+    		String url = Constants.POST_IMG_URL + eid;
             Integer success = 0; // set to 1 when post succeeds
             String json = params[0];
             Log.w("tag", json);
+            
+            JSONObject obj = new JSONObject();
             DefaultHttpClient httpClient = new DefaultHttpClient();
             
             try {
-
+            	obj.put("base64", json);
+            	StringEntity se = new StringEntity(obj.toString());
+            	se.setContentType("application/json");
+                HttpPost httppost = new HttpPost(url);
+                httppost.setEntity(se);
+                /*
                 HttpPost httppost = new HttpPost(url);
                 httppost.setHeader("Content-type", "application/json");
 
                 StringEntity se = new StringEntity(json); 
                 se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
                 httppost.setEntity(se); 
-
+*/
                 HttpResponse response = httpClient.execute(httppost);
                 String temp = EntityUtils.toString(response.getEntity());
                 Log.w("tag", temp);
@@ -423,6 +428,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
             }
             return success;
     	}
+
     	
     	@Override
     	protected void onPostExecute(Integer result) {
