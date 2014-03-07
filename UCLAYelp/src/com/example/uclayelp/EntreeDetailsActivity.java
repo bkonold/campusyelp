@@ -299,7 +299,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	        TextView text = (TextView) mView.findViewById(R.id.reviewListItem);
 	        if(items.get(position) != null)
 	        {
-	            text.setTextColor(Color.BLACK);
+	        	text.setTextColor(Color.BLACK);
 	            text.setTypeface(null, Typeface.ITALIC);
 	            text.setText(items.get(position));
 	        }
