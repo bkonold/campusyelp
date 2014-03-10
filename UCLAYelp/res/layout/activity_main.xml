@@ -24,10 +24,9 @@
 
            <ImageButton
                 android:id="@+id/ImageButton1"
-                style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@layout/dn_button"
+                android:background="@drawable/de_neve_selector"
                 android:onClick="displayMenus"/>
 
 
@@ -41,10 +40,9 @@
 
             <ImageButton
                 android:id="@+id/ImageButton2"
-                style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@layout/covel_button"/>
+                android:background="@drawable/covel_selector"/>
 
         </FrameLayout>
 
@@ -69,7 +67,7 @@
                 style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@layout/bp_button"
+                android:background="@drawable/bp_selector"
                 android:onClick="displayMenus" />
 
         </FrameLayout>
@@ -85,7 +83,7 @@
                 style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@layout/feast_button"
+                android:background="@drawable/feast_selector"
                 android:onClick="displayMenus" />
 
         </FrameLayout>
