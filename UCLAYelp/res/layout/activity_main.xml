@@ -4,8 +4,8 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg"
-    android:gravity="center" >
+    android:gravity="center"
+    android:background="#222222" >
 
     <LinearLayout
         android:id="@+id/LinearLayout2"
@@ -18,35 +18,38 @@
 
         <FrameLayout
             android:id="@+id/frameLayout1"
+            
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp" >
 
-            <Button
-                android:id="@+id/button1"
+            android:padding="8dp" >
+
+            <ImageButton
+                android:id="@+id/ImageButton1"
                 style="@style/btnStyleGenoa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="displayMenus"
-                android:text="@string/deneve"
-                android:textColor="@android:color/white" />
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:background="@drawable/dn1"
+                android:onClick="displayMenus" />
+
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/fl2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp" >
+            android:padding="8dp" >
 
-            <Button
-                android:id="@+id/button2"
+            <ImageButton
+                android:id="@+id/ImageButton2"
                 style="@style/btnStyleGenoa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="displayMenus"
-                android:text="@string/covel"
-                android:textColor="@android:color/white" />
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:background="@drawable/c1"
+                android:onClick="displayMenus" />
+
         </FrameLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -61,32 +64,32 @@
             android:id="@+id/fl3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp" >
+            android:padding="8dp" >
 
-            <Button
-                android:id="@+id/button3"
+            <ImageButton
+                android:id="@+id/ImageButton3"
                 style="@style/btnStyleGenoa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="displayMenus"
-                android:text="@string/bruin_plate"
-                android:textColor="@android:color/white" />
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:background="@drawable/bp1"
+                android:onClick="displayMenus" />
+
         </FrameLayout>
 
         <FrameLayout
             android:id="@+id/fl4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp" >
+            android:padding="8dp" >
 
-            <Button
-                android:id="@+id/button4"
+            <ImageButton
+                android:id="@+id/ImageButton4"
                 style="@style/btnStyleGenoa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="displayMenus"
-                android:text="@string/feast"
-                android:textColor="@android:color/white" />
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:background="@drawable/f1"
+                android:onClick="displayMenus" />
+
         </FrameLayout>
     </LinearLayout>
 
