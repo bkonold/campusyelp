@@ -39,6 +39,29 @@ public class JSONParser {
     	return maxId;
     }
     
+    public String getImageStringFromJson(int eid, int imgId) {
+    	String str = "";
+    	String url = Constants.GET_IMG_URL + eid + "/" + imgId;
+    	try {
+    		//defaultHttpClient
+    		DefaultHttpClient httpClient = new DefaultHttpClient();
+    		HttpGet httpGet = new HttpGet(url+eid);
+    		
+    		HttpResponse httpResponse = httpClient.execute(httpGet);
+    		HttpEntity httpEntity = httpResponse.getEntity();
+    		String s = EntityUtils.toString(httpEntity);
+    		
+    		JSONObject jObj = new JSONObject (s);
+    		str = jObj.getString("base64");
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return str;
+    	
+    }
+    
    
     public Menu getMenuFromJson(String url, String json_diningHall) {
     	Menu menu = null;
