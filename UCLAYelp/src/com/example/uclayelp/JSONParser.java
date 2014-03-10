@@ -16,6 +16,29 @@ public class JSONParser {
     // constructor
     public JSONParser() {}
     
+    public int getMaxIdFromJson(String url, int eid) {
+    	int maxId = 0;
+    	// Making HTTP request
+    	try {
+    		//defaultHttpClient
+    		DefaultHttpClient httpClient = new DefaultHttpClient();
+    		HttpGet httpGet = new HttpGet(url+eid);
+    		
+    		HttpResponse httpResponse = httpClient.execute(httpGet);
+    		HttpEntity httpEntity = httpResponse.getEntity();
+    		String s = EntityUtils.toString(httpEntity);
+    		
+    		JSONObject jObj = new JSONObject (s);
+    		maxId = jObj.getInt("max_id");
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	
+    	return maxId;
+    }
+    
    
     public Menu getMenuFromJson(String url, String json_diningHall) {
     	Menu menu = null;
