@@ -39,7 +39,7 @@ public class JSONParser {
     	return maxId;
     }
     
-    public String getImageStringFromJson(int eid, int imgId) {
+    public String getImageStrFromJson(int eid, int imgId) {
     	String str = "";
     	String url = Constants.GET_IMG_URL + eid + "/" + imgId;
     	try {
