@@ -58,6 +58,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 
 	private RatingBar ratingBar;
 	private ArrayList<Review> reviews;
+	private ArrayList<String> photos;
 	
 	
 	@Override
@@ -73,8 +74,11 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         
         // set title of Activity
         setTitle(entree);
+        
+        // Initialize photos array
+        photos = new ArrayList<String>();
        
-        ImageButton imageButton = (ImageButton) findViewById(R.id.imageButton1);
+        ImageButton imageButton = (ImageButton) findViewById(R.id.image_swipe_display);
         // TODO: get the right image?
         imageButton.setImageResource(R.drawable.breakfast);
         imageButton.setOnClickListener(this);        
@@ -105,6 +109,11 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         reviews = new ArrayList<Review>();
         reviews = i.getParcelableArrayListExtra(Constants.REVIEWS);
         setListView(reviews);
+        
+        
+        //Start getting all the user-submitted photos
+        GetAllPhotosTask fetchPhotos = new GetAllPhotosTask();
+        fetchPhotos.execute(eid);
         
 	}
 	
@@ -142,9 +151,10 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		Intent intent;
 		
 		switch (v.getId()){
-		case R.id.imageButton1:
+		case R.id.image_swipe_display:
 			intent = new Intent(this, ImageSwipeActivity.class);
 			intent.putExtra(Constants.ENTREE, entree);
+	        intent.putStringArrayListExtra("photoArray", photos);
 			startActivity(intent);
 			break;
 		case R.id.camera_button:
@@ -463,5 +473,62 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
             averageText.setText(String.format("%.02f", result.getRating()) + " overall");
     	}
 	} // end GetReviewsTask
+
+	private class GetPhotosTask extends AsyncTask<Integer, Void, String> {
+    	
+		private int picture_id;
+		
+    	@Override
+    	protected String doInBackground (Integer... params) {
+    		Integer entree_id = params[0];
+    		picture_id = params[1];
+    		Log.w("pictureID", "" + picture_id);
+    		
+    		JSONParser parser = new JSONParser();
+    		return parser.getImageStrFromJson(entree_id, picture_id);
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(String result) {
+    		photos.add(result);
+    		if (picture_id == 1) {
+    			byte[] imgBytes = Base64.decode(result, 0);
+    			
+    			Bitmap bmp = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+    			ImageButton display = (ImageButton) findViewById(R.id.image_swipe_display);
+
+    			display.setImageBitmap(bmp);
+    			// Make ImageSwiper Clickable, remove loading images from the 
+    		}
+    	}
+	} // end GetPhotosTask
+	
+	private class GetAllPhotosTask extends AsyncTask<Integer, Void, Integer> {
+    
+		private int entree_id;
+		
+    	@Override
+    	protected Integer doInBackground (Integer... params) {
+    		 entree_id = params[0];
+
+    		JSONParser parser = new JSONParser();
+    		return parser.getMaxIdFromJson(Constants.POST_IMG_URL, entree_id);
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(Integer result) {
+    		for (int i = 1; i < result+1; i++){
+    			GetPhotosTask picture = new GetPhotosTask();
+    			picture.execute(entree_id, i);
+    		}
+    			
+    	}
+	} // end GetPhotosTask
+	
+
 }
     
+
+
+
+

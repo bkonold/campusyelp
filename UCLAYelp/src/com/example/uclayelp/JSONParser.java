@@ -10,6 +10,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class JSONParser {
 
 
@@ -30,6 +32,7 @@ public class JSONParser {
     		
     		JSONObject jObj = new JSONObject (s);
     		maxId = jObj.getInt("max_id");
+    		Log.w("max_id", "" + maxId);
     		
     	} catch (Exception e) {
     		e.printStackTrace();
@@ -45,16 +48,19 @@ public class JSONParser {
     	try {
     		//defaultHttpClient
     		DefaultHttpClient httpClient = new DefaultHttpClient();
-    		HttpGet httpGet = new HttpGet(url+eid);
+    		HttpGet httpGet = new HttpGet(url);
     		
     		HttpResponse httpResponse = httpClient.execute(httpGet);
     		HttpEntity httpEntity = httpResponse.getEntity();
     		String s = EntityUtils.toString(httpEntity);
+    		Log.w("httpEntity", s);
     		
     		JSONObject jObj = new JSONObject (s);
     		str = jObj.getString("base64");
+    		Log.w("dlImage", str);
     		
     	} catch (Exception e) {
+    		Log.w("ImageError", e.getMessage());
     		e.printStackTrace();
     	}
     	

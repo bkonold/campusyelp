@@ -1,21 +1,30 @@
 package com.example.uclayelp;
 
+import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class ImageSwipeActivity extends Activity {
+	
+	ArrayList<Bitmap> images;
+	ArrayList<String> photos;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,14 +33,23 @@ public class ImageSwipeActivity extends Activity {
         
         setupActionBar();
         
+        
+        Intent j = getIntent();
+        String entree = j.getStringExtra(Constants.ENTREE);
+        photos = j.getStringArrayListExtra("photoArray");
+        
+        setTitle("Photos of " + entree);
+        
+        images = new ArrayList<Bitmap>();
+        for (int i = 0; i < photos.size(); i++) {
+        	byte[] imgBytes = Base64.decode(photos.get(i), 0);
+        	images.add(BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length));
+        }
+        
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         ImageSwiper adapter = new ImageSwiper();
         viewPager.setAdapter(adapter);
-        
-        Intent i = getIntent();
-        String entree = i.getStringExtra(Constants.ENTREE);
- 
-        setTitle("Photos of " + entree);
+
 	}
 	
 	/**
@@ -75,15 +93,10 @@ public class ImageSwipeActivity extends Activity {
 	 */
 	
 	private class ImageSwiper extends PagerAdapter {
-		private int[] images = new int [] {
-				R.drawable.breakfast,
-				R.drawable.lunch,
-				R.drawable.dinner
-		};
 		
 		@Override
 		public int getCount() {
-			return images.length;
+			return photos.size();
 		}
 		
 		@Override
@@ -98,7 +111,7 @@ public class ImageSwipeActivity extends Activity {
 			int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium); // TODO: don't use fixed constant here
 			imageView.setPadding(padding, padding, padding, padding);
 			imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			imageView.setImageResource(images[pos]);
+			imageView.setImageBitmap(images.get(pos));
 			((ViewPager) container).addView(imageView, 0);
 			return imageView;
 		}
