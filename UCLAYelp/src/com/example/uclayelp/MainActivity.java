@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -29,10 +30,10 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
         
-        Button deNeveButton = (Button) findViewById(R.id.button1);
-        Button covelButton = (Button) findViewById(R.id.button2);
-        Button bruinButton = (Button) findViewById(R.id.button3);
-        Button feastButton = (Button) findViewById(R.id.button4);
+        ImageButton deNeveButton = (ImageButton) findViewById(R.id.ImageButton1);
+        ImageButton covelButton = (ImageButton) findViewById(R.id.ImageButton2);
+        ImageButton bruinButton = (ImageButton) findViewById(R.id.ImageButton3);
+        ImageButton feastButton = (ImageButton) findViewById(R.id.ImageButton4);
         deNeveButton.setOnClickListener(this);
         covelButton.setOnClickListener(this);
         bruinButton.setOnClickListener(this);
@@ -40,15 +41,15 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     // Use this to set the size of the buttons to the longest one (Feast at Reiber)
-    @Override
+    /*@Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         // Call here getWidth() and getHeight()
         List<Button> allButtons = new ArrayList<Button>();
-        allButtons.add( (Button) findViewById(R.id.button1));
-        allButtons.add( (Button) findViewById(R.id.button2));
-        allButtons.add( (Button) findViewById(R.id.button3));
-        allButtons.add( (Button) findViewById(R.id.button4));
+        allButtons.add( (Button) findViewById(R.id.ImageButton1));
+        allButtons.add( (Button) findViewById(R.id.ImageButton2));
+        allButtons.add( (Button) findViewById(R.id.ImageButton3));
+        allButtons.add( (Button) findViewById(R.id.ImageButton4));
         
         int maxWidth = 0;
         for (Button button : allButtons){
@@ -62,7 +63,7 @@ public class MainActivity extends Activity implements OnClickListener {
         	button.setHeight(maxWidth/2);
         }
 
-     }
+     }*/
     
     @Override
     public void onClick(View v){
@@ -92,19 +93,19 @@ public class MainActivity extends Activity implements OnClickListener {
     private void getMenu(int buttonId) {
     	String json_diningHall = "";
     	switch(buttonId) {
-	        case R.id.button1:
+	        case R.id.ImageButton1:
 	        	diningHall = Constants.DE_NEVE;
 	        	json_diningHall = Constants.JSON_DE_NEVE;
 	    	    break;
-	        case R.id.button2:
+	        case R.id.ImageButton2:
 	        	diningHall = Constants.COVEL;
 	        	json_diningHall = Constants.JSON_COVEL;
 	    	    break;
-	        case R.id.button3:
+	        case R.id.ImageButton3:
 	        	diningHall = Constants.BRUIN_PLATE;
 	        	json_diningHall = Constants.JSON_BRUIN_PLATE;
 	    	    break;
-	        case R.id.button4:
+	        case R.id.ImageButton4:
 	        	diningHall = Constants.FEAST;
 	        	json_diningHall = Constants.JSON_FEAST;
 	    	    break;

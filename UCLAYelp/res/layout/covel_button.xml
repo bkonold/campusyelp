@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:drawable="@drawable/c1"/><!-- Normal Button View -->
+        <item android:state_pressed="true" android:drawable="@drawable/c2"/><!-- Pressed/Tapped Button View -->
+</selector>

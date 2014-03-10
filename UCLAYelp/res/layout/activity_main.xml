@@ -17,20 +17,19 @@
         android:orientation="horizontal" >
 
         <FrameLayout
-            android:id="@+id/frameLayout1"
-            
+            android:id="@+id/frameLayout1"  
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:padding="8dp" >
 
-            <ImageButton
+           <ImageButton
                 android:id="@+id/ImageButton1"
                 style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@drawable/dn1"
-                android:onClick="displayMenus" />
+                android:background="@layout/dn_button"
+                android:onClick="displayMenus"/>
+
 
         </FrameLayout>
 
@@ -45,8 +44,7 @@
                 style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@drawable/c1"
-                android:onClick="displayMenus" />
+                android:background="@layout/covel_button"/>
 
         </FrameLayout>
 
@@ -71,7 +69,7 @@
                 style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@drawable/bp1"
+                android:background="@layout/bp_button"
                 android:onClick="displayMenus" />
 
         </FrameLayout>
@@ -87,7 +85,7 @@
                 style="@style/btnStyleGenoa"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:background="@drawable/f1"
+                android:background="@layout/feast_button"
                 android:onClick="displayMenus" />
 
         </FrameLayout>
