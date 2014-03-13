@@ -55,6 +55,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
 	private String entree;
 	private int eid;
+	private int max_images;
 
 	private RatingBar ratingBar;
 	private ArrayList<Review> reviews;
@@ -80,8 +81,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
        
         ImageButton imageButton = (ImageButton) findViewById(R.id.image_swipe_display);
         // TODO: get the right image?
-        imageButton.setImageResource(R.drawable.breakfast);
-        imageButton.setOnClickListener(this);        
+		imageButton.setOnClickListener(this);
+        imageButton.setImageResource(R.drawable.breakfast);      
 
         // Button to add a photo
         Button cameraButton = (Button) findViewById(R.id.camera_button);
@@ -450,6 +451,10 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     			builder.setMessage("There was an error submitting your image. Please try again.");
     		}
     		
+    		ImageButton display = (ImageButton) findViewById(R.id.image_swipe_display);
+    		display.setOnClickListener(null);
+    		GetPhotosTask picture = new GetPhotosTask();
+    		picture.execute(eid, ++max_images);
     	}
 	}
 
@@ -491,15 +496,17 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     	@Override
     	protected void onPostExecute(String result) {
     		photos.add(result);
+    		
+    		ImageButton display = (ImageButton) findViewById(R.id.image_swipe_display);
+    		
     		if (picture_id == 1) {
     			byte[] imgBytes = Base64.decode(result, 0);
     			
     			Bitmap bmp = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-    			ImageButton display = (ImageButton) findViewById(R.id.image_swipe_display);
-
     			display.setImageBitmap(bmp);
-    			// Make ImageSwiper Clickable, remove loading images from the 
     		}
+    		if (picture_id == max_images)
+    			display.setOnClickListener(EntreeDetailsActivity.this);
     	}
 	} // end GetPhotosTask
 	
@@ -517,11 +524,11 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     	
     	@Override
     	protected void onPostExecute(Integer result) {
+    		max_images = result;
     		for (int i = 1; i < result+1; i++){
     			GetPhotosTask picture = new GetPhotosTask();
     			picture.execute(entree_id, i);
-    		}
-    			
+    		}	
     	}
 	} // end GetPhotosTask
 	

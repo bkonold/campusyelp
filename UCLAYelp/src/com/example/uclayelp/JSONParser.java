@@ -29,12 +29,14 @@ public class JSONParser {
     		HttpResponse httpResponse = httpClient.execute(httpGet);
     		HttpEntity httpEntity = httpResponse.getEntity();
     		String s = EntityUtils.toString(httpEntity);
+    		Log.w("max_id", "" + maxId);
     		
     		JSONObject jObj = new JSONObject (s);
     		maxId = jObj.getInt("max_id");
-    		Log.w("max_id", "" + maxId);
+    		Log.w("max_id_e", "" + maxId);
     		
     	} catch (Exception e) {
+    		Log.w("max_id_e", "" + maxId);
     		e.printStackTrace();
     	}
     	
