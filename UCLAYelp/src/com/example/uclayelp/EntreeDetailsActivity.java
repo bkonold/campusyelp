@@ -81,8 +81,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         setTitle(entree);
        
         ImageButton imageButton = (ImageButton) findViewById(R.id.image_swipe_display);
-        // TODO: get the right image?
-	//	imageButton.setOnClickListener(this);
         imageButton.setImageResource(R.drawable.loading);      
 
         // Button to add a photo
@@ -223,6 +221,12 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		 String fileName = "image" + max_images + ".jpg";
 		 File finalFile = new File(Environment.getExternalStorageDirectory()+File.separator + fileName);
 		 file.renameTo(finalFile);
+		 
+ 		if (max_images == 1) {
+			ImageButton display = (ImageButton) findViewById(R.id.image_swipe_display);
+			display.setImageBitmap(imageBitmap);
+    		display.setOnClickListener(EntreeDetailsActivity.this);
+		}
 		 
 		 new PostImageTask().execute(encodedImage);
 	}
@@ -387,7 +391,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     		} else {
     			builder.setMessage("There was an error submitting your review. Please try again.");
     		}
-    		
     	}
     }
 	// End PostReviewTask
@@ -544,6 +547,12 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     	@Override
     	protected void onPostExecute(Integer result) {
     		max_images = result;
+    		
+    		if (result == 0) {
+    	        ImageButton imageButton = (ImageButton) findViewById(R.id.image_swipe_display);
+    	        imageButton.setImageResource(R.drawable.no_image_available);
+    		}
+    		
     		for (int i = 1; i < result+1; i++){
     			GetPhotosTask picture = new GetPhotosTask();
     			picture.execute(entree_id, i);
