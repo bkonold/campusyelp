@@ -69,22 +69,11 @@ public class MealActivity extends ExpandableListActivity {
 		listDataHeader = new ArrayList<String>();
 		listDataChild = new HashMap<String, List<Entree>>();
 		stationEntreeMap = new HashMap<String, List<Entree>>();
-		
-		int size = 3;
-		
-		if (diningHall.equals(Constants.DE_NEVE)) {
-			listDataHeader = Constants.DENEVE_KITCHENS;
-		} else if (diningHall.equals(Constants.COVEL)) {
-			listDataHeader = Constants.COVEL_KITCHENS;
-		} else if (diningHall.equals(Constants.BRUIN_PLATE)) {
-			listDataHeader = Constants.BP_KITCHENS;
-			size+=1;
-		} else {
-			listDataHeader = Constants.FEAST_KITCHENS;
-			size+=1;
-		}
-		
+
+		int size = stationList.size();
 		for (int i = 0; i < size; i++) {
+			String s = stationList.get(i).getStation();
+			listDataHeader.add(s);
 			ArrayList<Entree> menuList = new ArrayList<Entree>();
 			ArrayList<Entree> entreeList = new ArrayList<Entree>();
 			entreeList = stationList.get(i).getEntrees();

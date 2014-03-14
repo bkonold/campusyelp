@@ -23,8 +23,8 @@ public class Constants {
 	
 	public final static String NETWORK_ERR_MSG = "No network connection.  Please try again!";
 	
-	public static final List<String> FEAST_KITCHENS =
-	        Arrays.asList("Bruin Wok", "Spice Kitchen", "Stone Oven", "Iron Grill");
+	//public static final List<String> FEAST_KITCHENS =
+	       // Arrays.asList("Bruin Wok", "Spice Kitchen", "Stone Oven", "Iron Grill");
 	public static final List<String> COVEL_KITCHENS =
 	        Arrays.asList("Exhibition Kitchen", "Euro Kitchen", "Pizza Oven");
 	public static final List<String> DENEVE_KITCHENS =
