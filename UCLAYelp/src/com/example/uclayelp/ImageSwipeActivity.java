@@ -1,5 +1,6 @@
 package com.example.uclayelp;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,11 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 
 public class ImageSwipeActivity extends Activity {
-	
-	ArrayList<Bitmap> images;
-	ArrayList<String> photos;
+	int numImages;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,19 +33,12 @@ public class ImageSwipeActivity extends Activity {
         this.setContentView(R.layout.image_swipe);
         
         setupActionBar();
-        
-        
+
         Intent j = getIntent();
+        numImages = j.getIntExtra("numImages", 0);
         String entree = j.getStringExtra(Constants.ENTREE);
-        photos = j.getStringArrayListExtra("photoArray");
         
         setTitle("Photos of " + entree);
-        
-        images = new ArrayList<Bitmap>();
-        for (int i = 0; i < photos.size(); i++) {
-        	byte[] imgBytes = Base64.decode(photos.get(i), 0);
-        	images.add(BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length));
-        }
         
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         ImageSwiper adapter = new ImageSwiper();
@@ -96,7 +90,7 @@ public class ImageSwipeActivity extends Activity {
 		
 		@Override
 		public int getCount() {
-			return photos.size();
+			return numImages;
 		}
 		
 		@Override
@@ -111,7 +105,14 @@ public class ImageSwipeActivity extends Activity {
 			int padding = context.getResources().getDimensionPixelSize(R.dimen.padding_medium); // TODO: don't use fixed constant here
 			imageView.setPadding(padding, padding, padding, padding);
 			imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			imageView.setImageBitmap(images.get(pos));
+			
+			int filePos = pos+1;
+			String fileName = "image" + filePos + ".jpg";
+			File file = new File(Environment.getExternalStorageDirectory()+File.separator + fileName);
+			Bitmap imageBitmap = EntreeDetailsActivity.decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250);
+			imageView.setImageBitmap(imageBitmap);
+			imageView.setAdjustViewBounds(true);
+			
 			((ViewPager) container).addView(imageView, 0);
 			return imageView;
 		}

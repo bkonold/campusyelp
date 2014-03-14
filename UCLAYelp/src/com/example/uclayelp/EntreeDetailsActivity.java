@@ -1,7 +1,11 @@
 package com.example.uclayelp;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -55,11 +60,10 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	
 	private String entree;
 	private int eid;
-	private int max_images;
+	private int max_images = 0;
 
 	private RatingBar ratingBar;
 	private ArrayList<Review> reviews;
-	private ArrayList<String> photos;
 	
 	
 	@Override
@@ -75,14 +79,11 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         
         // set title of Activity
         setTitle(entree);
-        
-        // Initialize photos array
-        photos = new ArrayList<String>();
        
         ImageButton imageButton = (ImageButton) findViewById(R.id.image_swipe_display);
         // TODO: get the right image?
-		imageButton.setOnClickListener(this);
-        imageButton.setImageResource(R.drawable.breakfast);      
+	//	imageButton.setOnClickListener(this);
+        imageButton.setImageResource(R.drawable.loading);      
 
         // Button to add a photo
         Button cameraButton = (Button) findViewById(R.id.camera_button);
@@ -155,7 +156,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		case R.id.image_swipe_display:
 			intent = new Intent(this, ImageSwipeActivity.class);
 			intent.putExtra(Constants.ENTREE, entree);
-	        intent.putStringArrayListExtra("photoArray", photos);
+	        intent.putExtra("numImages", max_images);
 			startActivity(intent);
 			break;
 		case R.id.camera_button:
@@ -207,10 +208,8 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	 * */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		 File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
-		// iv = (ImageView) findViewById(R.id.imageView1);
+		 File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg"); 
 		 Bitmap imageBitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250);
-		 //iv.setImageBitmap(bitmap);
 		 
 		 //TODO: post to server
 		 // POST TO SERVER
@@ -219,6 +218,12 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		 byte[] byteArrayImage = baos.toByteArray(); 
 		 
 		 String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+		 
+		 max_images++;
+		 String fileName = "image" + max_images + ".jpg";
+		 File finalFile = new File(Environment.getExternalStorageDirectory()+File.separator + fileName);
+		 file.renameTo(finalFile);
+		 
 		 new PostImageTask().execute(encodedImage);
 	}
 	
@@ -450,11 +455,6 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     		} else {
     			builder.setMessage("There was an error submitting your image. Please try again.");
     		}
-    		
-    		ImageButton display = (ImageButton) findViewById(R.id.image_swipe_display);
-    		display.setOnClickListener(null);
-    		GetPhotosTask picture = new GetPhotosTask();
-    		picture.execute(eid, ++max_images);
     	}
 	}
 
@@ -495,16 +495,35 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
     	
     	@Override
     	protected void onPostExecute(String result) {
-    		photos.add(result);
+    		// imageData = bitmap of imageData
+    		byte[] imgBytes = Base64.decode(result, 0);
+			Bitmap imageData = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+    		
+    		// Save to sdCard
+    		String fileName = "image" + picture_id + ".jpg";
+
+    		try {
+    			FileOutputStream fileOutputStream = 
+    					new FileOutputStream(Environment.getExternalStorageDirectory()+File.separator + fileName);
+
+    			BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
+
+    			imageData.compress(CompressFormat.JPEG, 100, bos);
+
+    			bos.flush();
+    			bos.close();
+
+    		} catch (FileNotFoundException e) {
+    			Log.w("TAG", "Error saving image file: " + e.getMessage());
+    		} catch (IOException e) {
+    			Log.w("TAG", "Error saving image file: " + e.getMessage());
+    		}
     		
     		ImageButton display = (ImageButton) findViewById(R.id.image_swipe_display);
     		
-    		if (picture_id == 1) {
-    			byte[] imgBytes = Base64.decode(result, 0);
-    			
-    			Bitmap bmp = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-    			display.setImageBitmap(bmp);
-    		}
+    		if (picture_id == 1) 
+    			display.setImageBitmap(imageData);
+
     		if (picture_id == max_images)
     			display.setOnClickListener(EntreeDetailsActivity.this);
     	}
