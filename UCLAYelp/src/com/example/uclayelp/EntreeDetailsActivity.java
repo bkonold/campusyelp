@@ -227,6 +227,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	 * */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != Activity.RESULT_OK) return;
 		 File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg"); 
 		 Bitmap imageBitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 500, 250);
 		 
