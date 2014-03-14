@@ -87,10 +87,15 @@ public class DisplayMenusActivity extends TabActivity {
 		
 		
 		newIntent.putExtra(Constants.DINING_HALL, diningHall);
-		if (meal.equals(Constants.LUNCH))
-				newIntent.putExtra(Constants.MENU,  menu.getLunchMenu());
-		else
+		if (meal.equals(Constants.LUNCH)) {
+			newIntent.putExtra(Constants.MENU,  menu.getLunchMenu());
+			newIntent.putExtra("isLunch", true);
+		}
+				
+		else {
 			newIntent.putExtra(Constants.MENU,  menu.getDinnerMenu());
+			newIntent.putExtra("isLunch", false);
+		}
 
 		
 		tab.setContent(newIntent);

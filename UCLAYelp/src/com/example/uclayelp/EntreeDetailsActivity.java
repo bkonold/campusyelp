@@ -39,6 +39,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -61,7 +62,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 	private String entree;
 	private int eid;
 	private int max_images = 0;
-
+    private float buttonRating;
 	private RatingBar ratingBar;
 	private ArrayList<Review> reviews;
 	
@@ -93,7 +94,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
         
         // Rating bar
         ratingBar = (RatingBar) findViewById(R.id.ratingBar1);
-        float buttonRating = i.getFloatExtra(Constants.RATING, 0);
+        buttonRating = i.getFloatExtra(Constants.RATING, 0);
         ratingBar.setRating(buttonRating); 
         ratingBar.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -139,12 +140,32 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 			//
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
+
+			Intent i = getIntent();
+			i.putExtra("rating", buttonRating);
+			setResult(RESULT_OK, i);
+			finish();
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	
 	}
+	
+	@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+			Intent i = getIntent();
+			i.putExtra("rating", buttonRating);
+			setResult(RESULT_OK, i);
+			finish();
+
+            //Here put your code i.e start new activity but first finish current activity
+
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 	
 	@Override
     public void onClick(View v){

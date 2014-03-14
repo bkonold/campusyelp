@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -18,6 +19,8 @@ public class MealActivity extends ExpandableListActivity {
 	private String diningHall;
 	private ArrayList<Station> stationList;
 	private Entree selectedEntree;
+	
+	private boolean lunch;
 	 
     private ExpandableListAdapter listAdapter;
     private ExpandableListView expListView;
@@ -38,6 +41,7 @@ public class MealActivity extends ExpandableListActivity {
 		Intent intent = getIntent();
 		diningHall = intent.getStringExtra(Constants.DINING_HALL);
 		stationList = intent.getParcelableArrayListExtra(Constants.MENU);
+		lunch = intent.getBooleanExtra("isLunch",  true);
 		
 		populateList();
 		 
@@ -54,6 +58,7 @@ public class MealActivity extends ExpandableListActivity {
 		//selected item
 		List<Entree> entrees = stationEntreeMap.get(listDataHeader.get(groupPosition));
 		selectedEntree = entrees.get(childPosition);
+		
 		
 		//launch new activity
 		new GetReviewsTask().execute(selectedEntree.getId()); // TODO: replace w/ eid
@@ -89,6 +94,25 @@ public class MealActivity extends ExpandableListActivity {
 			listDataChild.put(listDataHeader.get(i), menuList);
 			stationEntreeMap.put(listDataHeader.get(i), entreeList);
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		String jdh;
+		if (diningHall.equals(Constants.DE_NEVE))
+			jdh = Constants.JSON_DE_NEVE;
+		else if (diningHall.equals(Constants.COVEL))
+			jdh = Constants.JSON_COVEL;
+		else if (diningHall.equals(Constants.BRUIN_PLATE))
+			jdh = Constants.JSON_BRUIN_PLATE;
+		else 
+			jdh = Constants.JSON_FEAST;
+		
+
+		
+		new GetMenuTask().execute("http://54.186.3.129/app/menu", jdh);
+		
 	}
 	
 	
@@ -128,7 +152,53 @@ public class MealActivity extends ExpandableListActivity {
     		i.putExtra(Constants.EID, selectedEntree.getId());
     		i.putExtra(Constants.REVIEWS, result.getReviews());
     		
-    		startActivity(i);
+    		startActivityForResult(i,1);
+    		myProgressDialog.dismiss();
+    	}
+    }
+	
+	private class GetMenuTask extends AsyncTask<String, Void, Menu> {
+        // For loading message
+    	ProgressDialog myProgressDialog;
+    
+    	@Override
+        protected void onPreExecute()
+        {
+    		// Before anything runs, show loading message
+    		// Respond to back button (cancel loading)
+            myProgressDialog= ProgressDialog.show(MealActivity.this, "Just a Second!", "Loading Menus...", 
+            		true, true,  new DialogInterface.OnCancelListener(){
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        	myProgressDialog.dismiss();
+                        }
+            }
+            );
+        }; 
+    	
+    	@Override
+    	protected Menu doInBackground (String... params) {
+    		String url = params[0];
+    	    String diningHall = params[1];
+    		
+    		JSONParser parser = new JSONParser();
+    		return parser.getMenuFromJson(url,  diningHall);
+    	}
+    	
+    	@Override
+    	protected void onPostExecute(Menu result) {
+    		//displayMenus(result, diningHall);
+    		if (lunch) stationList = result.getLunchMenu();
+    		else
+    			stationList = result.getDinnerMenu();
+    		populateList();
+    		listAdapter = new ExpandableListAdapter(MealActivity.this, listDataHeader, listDataChild);		
+    		expListView.setAdapter(listAdapter);
+    		int count = listAdapter.getGroupCount();
+    		for (int position = 1; position <= count; position++)
+    			expListView.expandGroup(position-1);
+    		 
+    		expListView.setOnChildClickListener(MealActivity.this);
     		myProgressDialog.dismiss();
     	}
     }
