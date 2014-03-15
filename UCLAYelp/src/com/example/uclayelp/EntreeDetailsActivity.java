@@ -234,7 +234,7 @@ public class EntreeDetailsActivity extends Activity implements OnClickListener {
 		 //TODO: post to server
 		 // POST TO SERVER
 		 ByteArrayOutputStream baos = new ByteArrayOutputStream();  
-		 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object   
+		 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);   
 		 byte[] byteArrayImage = baos.toByteArray(); 
 		 
 		 String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
